@@ -31,30 +31,57 @@ public struct ContentView: View {
 }
 
 
-
+struct VideoFile: Identifiable {
+    let id: Int
+    let name: String
+    let path: String
+}
 
 struct InputVideo: View {
+    @State private var files = [
+        VideoFile(id: 1, name: "sample.mp4", path: "95"),
+        VideoFile(id: 2, name: "testing.mov", path: "80"),
+        VideoFile(id: 3, name: "testing.mov", path: "80"),
+        VideoFile(id: 4, name: "testing.mov", path: "80"),
+        VideoFile(id: 5, name: "testing.mov", path: "80"),
+        VideoFile(id: 6, name: "testing.mov", path: "80"),
+        VideoFile(id: 7, name: "testing.mov", path: "80"),
+        VideoFile(id: 8, name: "testing.mov", path: "80"),
+        VideoFile(id: 9, name: "Adele Adkins", path: "85")
+        ]
+    @State private var selection = Set<VideoFile.ID>() // <-- Use this for multiple rows selections
+
     var body: some View {
         VStack(alignment: .trailing, spacing: 5) {
             Text("Selected files")
                 .font(.system(.body))
                 .fontWeight(.regular)
                 .frame(maxWidth: .infinity, alignment: .leading)
-            
-            VStack(alignment: .center, spacing: 20) {
-                Image(systemName: "plus.circle")
-                    .resizable()
-                    .frame(width: 64, height: 64)
-                    .foregroundColor(.blue)
-                Text("Drop your videos here")
-                    .font(.custom("Inter", size: 13))
-                    .foregroundColor(Color(red: 0, green: 0, blue: 0, opacity: 0.35))
+            VStack {
+                Table(files, selection: $selection) {
+                    TableColumn("Name", value: \.name)
+    //                TableColumn("") { file in
+    //                    Text(String(file.path))
+    //                }
+                }
+                .offset(y: -27)
             }
-            .padding(.all, 20)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-//            .frame(height: 196)
-            .cornerRadius(10)
-            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color(red: 0.29, green: 0.57, blue: 0.97), lineWidth: 1))
+            .clipped()
+
+//            VStack(alignment: .center, spacing: 20) {
+//                Image(systemName: "plus.circle")
+//                    .resizable()
+//                    .frame(width: 64, height: 64)
+//                    .foregroundColor(.blue)
+//                Text("Drop your videos here")
+//                    .font(.custom("Inter", size: 13))
+//                    .foregroundColor(Color(red: 0, green: 0, blue: 0, opacity: 0.35))
+//            }
+//            .padding(.all, 20)
+//            .frame(maxWidth: .infinity, maxHeight: .infinity)
+////            .frame(height: 196)
+//            .cornerRadius(10)
+//            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color(red: 0.29, green: 0.57, blue: 0.97), lineWidth: 1))
             Button("Clear all") {
                 
             }
