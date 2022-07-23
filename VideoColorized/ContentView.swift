@@ -12,22 +12,16 @@ public struct ContentView: View {
     public var body: some View {
         VStack(alignment: .center, spacing: 20) {
             InputVideo()
-            ZStack {
-                Text("Destination")
-                    .font(.custom("Inter", size: 12))
-                    .foregroundColor(Color(red: 0, green: 0, blue: 0))
-                HStack(alignment: .center, spacing: 16) {
-                }
-                .background(Color(red: 1, green: 1, blue: 1))
-                .position(x: 270.5, y: 34)
-            }
-            .frame(maxWidth: .infinity, alignment: .topLeading)
-            .background(Color(red: 1, green: 1, blue: 1, opacity: 0))
-            .overlay(Rectangle().stroke(Color(red: 0, green: 0, blue: 0, opacity: 0.09), lineWidth: 1))
+            DestinationView()
             
             RenderSettingView()
-
-            ProgressView()
+            Button("CONVERT") {
+                
+            }
+                .font(.callout)
+                .foregroundStyle(.primary)
+                .foregroundColor(.blue)
+            ConvertProgressView()
 //            .background(Color(red: 1, green: 1, blue: 1))
         }
         .padding(.horizontal, 30)
@@ -38,22 +32,13 @@ public struct ContentView: View {
 
 
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-//        ContentView()
-//            .frame(width: 616, height: 616)
-//            .preferredColorScheme(.dark)
-        ProgressView().preferredColorScheme(.dark)
-    }
-}
-//
 
 struct InputVideo: View {
     var body: some View {
         VStack(alignment: .trailing, spacing: 5) {
             Text("Selected files")
                 .font(.system(.body))
-                .foregroundColor(Color(red: 0, green: 0, blue: 0))
+                .fontWeight(.regular)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
             VStack(alignment: .center, spacing: 20) {
@@ -73,7 +58,7 @@ struct InputVideo: View {
             Button("Clear all") {
                 
             }
-            .font(/*@START_MENU_TOKEN@*/.callout/*@END_MENU_TOKEN@*/)
+            .font(.callout)
             .foregroundStyle(.secondary)
             .foregroundColor(.black)
         }
@@ -100,7 +85,7 @@ struct RenderSettingView: View {
     }
 }
 
-struct ProgressView: View {
+struct ConvertProgressView: View {
     @State private var downloadAmount = 0.0
 
     var body: some View {
@@ -110,8 +95,10 @@ struct ProgressView: View {
                     .font(.custom("Inter", size: 11))
                     .foregroundColor(Color(red: 0, green: 0, blue: 0))
                 HStack(alignment: .center, spacing: 10) {
-//                    ProgressView()
-                    Text("0%")
+                    ProgressView(value: 50, total: 100)
+                        .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                    
+                    Text("50%")
                         .font(.custom("Inter", size: 11))
                         .foregroundColor(Color(red: 0, green: 0, blue: 0))
                 }
@@ -127,7 +114,9 @@ struct ProgressView: View {
                     .font(.custom("Inter", size: 12))
                     .foregroundColor(Color(red: 0, green: 0, blue: 0))
                 HStack(alignment: .center, spacing: 10) {
-                    Text("0%")
+                    ProgressView(value: 75, total: 100)
+                        .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                    Text("75%")
                         .font(.custom("Inter", size: 11))
                         .foregroundColor(Color(red: 0, green: 0, blue: 0))
                 }
@@ -139,5 +128,58 @@ struct ProgressView: View {
 //            .overlay(Rectangle().stroke(Color(red: 0, green: 0, blue: 0, opacity: 0), lineWidth: 1))
         }
         .frame(maxWidth: .infinity, alignment: .topLeading)
+    }
+}
+
+struct DestinationView: View {
+    @State private var isOn: Bool = true
+    @State private var outputPath: String = "~/Desktop/My Videos/"
+    var body: some View {
+        VStack() {
+            GroupBox("Destination") {
+                HStack() {
+                    TextField("", text: $outputPath)
+                    Button("Browse") {
+                        
+                    }
+                    Button("Open") {
+                        
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.all, 10.0)
+                Toggle(isOn: $isOn) {
+                    Text("Same as source")
+                }
+                .padding(.bottom, 5.0)
+                .frame(maxWidth: .infinity)
+            }
+            .frame(alignment: .leading)
+            .background(/*@START_MENU_TOKEN@*//*@PLACEHOLDER=View@*/Color(hue: 1.0, saturation: 0.0, brightness: 1.0, opacity: 0.0)/*@END_MENU_TOKEN@*/)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+//        ZStack {
+//            Text("Destination")
+//                .font(.custom("Inter", size: 12))
+//                .foregroundColor(Color(red: 0, green: 0, blue: 0))
+//            HStack(alignment: .center, spacing: 16) {
+//            }
+//            .background(Color(red: 1, green: 1, blue: 1))
+//            .position(x: 270.5, y: 34)
+//        }
+//        .frame(maxWidth: .infinity, alignment: .topLeading)
+//        .background(Color(red: 1, green: 1, blue: 1, opacity: 0))
+//        .overlay(Rectangle().stroke(Color(red: 0, green: 0, blue: 0, opacity: 0.09), lineWidth: 1))
+    }
+}
+
+
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+            .frame(width: 616, height: 616)
+            .preferredColorScheme(.light)
+//        ConvertProgressView().preferredColorScheme(.dark)
     }
 }
