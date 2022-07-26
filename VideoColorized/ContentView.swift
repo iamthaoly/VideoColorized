@@ -48,11 +48,9 @@ public struct ContentView: View {
             
             
             ConvertProgressView()
-            //            .background(Color(red: 1, green: 1, blue: 1))
         }
         .padding(.horizontal, 30)
         .padding(.vertical, 20)
-        //        .background(Color(red: 1, green: 1, blue: 1))
     }
 }
 
@@ -67,14 +65,15 @@ struct InputVideo: View {
     @State private var files = [
         VideoFile(id: 1, name: "sample.mp4", path: "~/Desktop/My Videos/sample.mp4"),
         VideoFile(id: 2, name: "testing.mov", path: "~/Desktop/My Videos/testing.mp4"),
-        //        VideoFile(id: 3, name: "testing.mov", path: "80"),
-        //        VideoFile(id: 4, name: "testing.mov", path: "80"),
-        //        VideoFile(id: 5, name: "testing.mov", path: "80"),
-        //        VideoFile(id: 6, name: "testing.mov", path: "80"),
-        //        VideoFile(id: 7, name: "testing.mov", path: "80"),
-        //        VideoFile(id: 8, name: "testing.mov", path: "80"),
-        //        VideoFile(id: 9, name: "Adele Adkins", path: "85")
+                VideoFile(id: 3, name: "testing.mov", path: "80"),
+                VideoFile(id: 4, name: "testing.mov", path: "80"),
+                VideoFile(id: 5, name: "testing.mov", path: "80"),
+                VideoFile(id: 6, name: "testing.mov", path: "80"),
+                VideoFile(id: 7, name: "testing.mov", path: "80"),
+                VideoFile(id: 8, name: "testing.mov", path: "80"),
+                VideoFile(id: 9, name: "Adele Adkins", path: "85")
     ]
+    
     @State private var selection = Set<VideoFile.ID>() // <-- Use this for multiple rows selections
     
     var body: some View {
@@ -91,10 +90,13 @@ struct InputVideo: View {
                     //                }
                 }
                 .offset(y: -27)
+                .opacity(0.85)
+                
             }
             .clipped()
-            .cornerRadius(10)
+            .cornerRadius(8)
             .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color(red: 0.29, green: 0.57, blue: 0.97), lineWidth: 1))
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             
             //            VStack(alignment: .center, spacing: 20) {
             //                Image(systemName: "plus.circle")
@@ -113,9 +115,7 @@ struct InputVideo: View {
             Button("Clear all") {
                 
             }
-            //            .font(.callout)
-            //            .foregroundStyle(.secondary)
-            //            .foregroundColor(.black)
+
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         //        .background(Color(red: 1, green: 1, blue: 1))
@@ -132,6 +132,7 @@ struct RenderSettingView: View {
                 .fontWeight(.regular)
             TextField("", value: $sleepAmount, formatter: NumberFormatter())
                 .frame(width: 28.0)
+                .opacity(0.73)
             Stepper("", value: $sleepAmount, in: 4...12)
             
         }
@@ -150,7 +151,6 @@ struct ConvertProgressView: View {
                 HStack(alignment: .center, spacing: 10) {
                     ProgressView(value: 50, total: 100)
                         .foregroundColor(.green)
-                    
                     Text("50%")
                         .fontWeight(.bold)
                 }
@@ -185,50 +185,51 @@ struct DestinationView: View {
     @State private var isOn: Bool = true
     @State private var outputPath: String = "~/Desktop/My Videos/"
     var body: some View {
-        VStack() {
-            GroupBox("Destination") {
-                HStack() {
-                    TextField("", text: $outputPath)
-                    Button("Browse") {
+        VStack(alignment: .leading) {
+            ZStack(alignment: .topLeading) {
+                GroupBox("") {
+                    VStack {
+                        HStack() {
+                            TextField("", text: $outputPath)
+                                .opacity(0.85)
+                            Button("Browse") {
+                                
+                            }
+                            Button("Open") {
+                                
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.all, 10.0)
                         
-                    }
-                    Button("Open") {
-                        
+                        Toggle(isOn: $isOn) {
+                            Text("Same as source")
+                        }
+                        .padding(.bottom, 15.0)
+                        .padding(.horizontal, 10.0)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.all, 10.0)
-                
-                Toggle(isOn: $isOn) {
-                    Text("Same as source")
-                }
-                .padding(.bottom, 15.0)
-                .padding(.horizontal, 10.0)
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .groupBoxStyle(TransparentGroupBox())
+                Text("Destination").offset(x: 20, y: -8)
             }
-            .background(
-                RoundedRectangle(cornerRadius: 5)
-                    .fill(Color.clear.opacity(0)
-                )
-            )
-            //            .groupBoxStyle(OrangeGroupBoxStyle())
-            .frame(alignment: .leading)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        //        ZStack {
-        //            Text("Destination")
-        //                .font(.custom("Inter", size: 12))
-        //                .foregroundColor(Color(red: 0, green: 0, blue: 0))
-        //            HStack(alignment: .center, spacing: 16) {
-        //            }
-        //            .background(Color(red: 1, green: 1, blue: 1))
-        //            .position(x: 270.5, y: 34)
-        //        }
-        //        .frame(maxWidth: .infinity, alignment: .topLeading)
-        //        .background(Color(red: 1, green: 1, blue: 1, opacity: 0))
-        //        .overlay(Rectangle().stroke(Color(red: 0, green: 0, blue: 0, opacity: 0.09), lineWidth: 1))
+
     }
 }
+
+struct TransparentGroupBox: GroupBoxStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.content
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(RoundedRectangle(cornerRadius: 8).fill(Color.clear))
+            .overlay(configuration.label.padding(.leading, 4), alignment: .topLeading)
+            .border(Color(red: 0, green: 0, blue: 0, opacity: 0.3), width: 0.5)
+    }
+}
+
 
 struct OrangeGroupBoxStyle: GroupBoxStyle {
     var background: some View {
