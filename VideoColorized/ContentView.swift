@@ -32,13 +32,15 @@ public struct ContentView: View {
 //            .padding(.horizontal, 45.0)
             Button(action: {}) {
                 Text("STOP")
+                    .font(.system(size: 13.0))
+                    .fontWeight(.medium)
                     .padding(22)
-                    .frame(height: 21)
+                    .frame(height: 25)
                     .frame(maxWidth: .infinity)
                     .foregroundStyle(.red)
 //                    .background(Color.blue)
 //                    .foregroundColor(Color.white)
-            }.frame(height: 21)
+            }.frame(height: 30)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 10.0)
                 .padding(.horizontal, 45.0)
@@ -128,7 +130,6 @@ struct RenderSettingView: View {
             Text("Render factor")
                 .font(.body)
                 .fontWeight(.regular)
-                .foregroundColor(Color(red: 0, green: 0, blue: 0))
             TextField("", value: $sleepAmount, formatter: NumberFormatter())
                 .frame(width: 28.0)
             Stepper("", value: $sleepAmount, in: 4...12)
@@ -146,15 +147,12 @@ struct ConvertProgressView: View {
         VStack(alignment: .leading, spacing: 5) {
             VStack(alignment: .leading, spacing: 5) {
                 Text("Current progress")
-                    .font(.custom("Inter", size: 11))
-                    .foregroundColor(Color(red: 0, green: 0, blue: 0))
                 HStack(alignment: .center, spacing: 10) {
                     ProgressView(value: 50, total: 100)
                         .foregroundColor(.green)
                     
                     Text("50%")
-                        .font(.custom("Inter", size: 11))
-                        .foregroundColor(Color(red: 0, green: 0, blue: 0))
+                        .fontWeight(.bold)
                 }
                 .frame(maxWidth: .infinity)
                 //                .background(Color(red: 1, green: 1, blue: 1))
@@ -165,15 +163,12 @@ struct ConvertProgressView: View {
             
             VStack(alignment: .leading, spacing: 5) {
                 Text("Total progress")
-                    .font(.custom("Inter", size: 12))
                     .fontWeight(.bold)
-                    .foregroundColor(Color(red: 0, green: 0, blue: 0))
                 HStack(alignment: .center, spacing: 10) {
                     ProgressView(value: 75, total: 100)
                         .foregroundColor(.green)
                     Text("75%")
-                        .font(.custom("Inter", size: 11))
-                        .foregroundColor(Color(red: 0, green: 0, blue: 0))
+                        .fontWeight(.bold)
                 }
                 .frame(maxWidth: .infinity)
                 //                .background(Color(red: 1, green: 1, blue: 1))
