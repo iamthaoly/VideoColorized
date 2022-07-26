@@ -65,13 +65,13 @@ struct InputVideo: View {
     @State private var files = [
         VideoFile(id: 1, name: "sample.mp4", path: "~/Desktop/My Videos/sample.mp4"),
         VideoFile(id: 2, name: "testing.mov", path: "~/Desktop/My Videos/testing.mp4"),
-                VideoFile(id: 3, name: "testing.mov", path: "80"),
-                VideoFile(id: 4, name: "testing.mov", path: "80"),
-                VideoFile(id: 5, name: "testing.mov", path: "80"),
-                VideoFile(id: 6, name: "testing.mov", path: "80"),
-                VideoFile(id: 7, name: "testing.mov", path: "80"),
-                VideoFile(id: 8, name: "testing.mov", path: "80"),
-                VideoFile(id: 9, name: "Adele Adkins", path: "85")
+//                VideoFile(id: 3, name: "testing.mov", path: "80"),
+//                VideoFile(id: 4, name: "testing.mov", path: "80"),
+//                VideoFile(id: 5, name: "testing.mov", path: "80"),
+//                VideoFile(id: 6, name: "testing.mov", path: "80"),
+//                VideoFile(id: 7, name: "testing.mov", path: "80"),
+//                VideoFile(id: 8, name: "testing.mov", path: "80"),
+//                VideoFile(id: 9, name: "Adele Adkins", path: "85")
     ]
     
     @State private var selection = Set<VideoFile.ID>() // <-- Use this for multiple rows selections
@@ -85,18 +85,18 @@ struct InputVideo: View {
             VStack {
                 Table(files, selection: $selection) {
                     TableColumn("Name", value: \.name)
+                    
                     //                TableColumn("") { file in
                     //                    Text(String(file.path))
                     //                }
                 }
-                .offset(y: -27)
+//                .offset(y: -27)
                 .opacity(0.85)
-                
             }
             .clipped()
             .cornerRadius(8)
-            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color(red: 0.29, green: 0.57, blue: 0.97), lineWidth: 1))
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color(red: 0.29, green: 0.57, blue: 0.97), lineWidth: 1))
             
             //            VStack(alignment: .center, spacing: 20) {
             //                Image(systemName: "plus.circle")
@@ -123,7 +123,7 @@ struct InputVideo: View {
 }
 
 struct RenderSettingView: View {
-    @State private var sleepAmount = 8
+    @State private var sleepAmount = 21
     
     var body: some View {
         HStack(spacing: 5) {
@@ -133,7 +133,7 @@ struct RenderSettingView: View {
             TextField("", value: $sleepAmount, formatter: NumberFormatter())
                 .frame(width: 28.0)
                 .opacity(0.73)
-            Stepper("", value: $sleepAmount, in: 4...12)
+            Stepper("", value: $sleepAmount, in: 10...40)
             
         }
         .padding(.horizontal, 9)
@@ -191,7 +191,8 @@ struct DestinationView: View {
                     VStack {
                         HStack() {
                             TextField("", text: $outputPath)
-                                .opacity(0.85)
+//                                .opacity(0.85)
+                                .disabled(true)
                             Button("Browse") {
                                 
                             }
@@ -260,7 +261,7 @@ struct ContentView_Previews: PreviewProvider {
         
         ContentView()
             .frame(width: 616, height: 616)
-            .preferredColorScheme(.light)
+//            .preferredColorScheme(.light)
         //        ConvertProgressView().preferredColorScheme(.dark)
     }
 }
