@@ -150,7 +150,7 @@ struct ConvertProgressView: View {
                 Text("Current progress")
                 HStack(alignment: .center, spacing: 10) {
                     ProgressView(value: 50, total: 100)
-                        .foregroundColor(.green)
+                        .tint(.green)
                     Text("50%")
                         .fontWeight(.bold)
                 }
@@ -166,7 +166,7 @@ struct ConvertProgressView: View {
                     .fontWeight(.bold)
                 HStack(alignment: .center, spacing: 10) {
                     ProgressView(value: 75, total: 100)
-                        .foregroundColor(.green)
+                        .tint(.green)
                     Text("75%")
                         .fontWeight(.bold)
                 }
@@ -182,7 +182,7 @@ struct ConvertProgressView: View {
 }
 
 struct DestinationView: View {
-    @State private var isOn: Bool = true
+    @State private var isOn: Bool = false
     @State private var outputPath: String = "~/Desktop/My Videos/"
     var body: some View {
         VStack(alignment: .leading) {
