@@ -9,42 +9,47 @@ import SwiftUI
 
 public struct ContentView: View {
     
+    @State var testManager: TestManager?
+    
     public var body: some View {
         VStack(alignment: .center, spacing: 20) {
             InputVideo()
             DestinationView()
-            
             RenderSettingView()
-//            VStack(alignment: .center) {
-//                Button(action: { print()}) {
-//                    Text("STOP")
-//                        .padding(.vertical, 5)
-//                        .frame(maxWidth: .infinity, minHeight: 45, maxHeight: .infinity)
-//                }
-//                .font(.title3)
-//                .foregroundStyle(.red)
-//                .padding(20.0)
-//                .foregroundColor(.blue)
-//                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-//            }
-//            .frame(maxWidth: .infinity, maxHeight: .infinity)
-//            .padding(.vertical, 10.0)
-//            .padding(.horizontal, 45.0)
-            Button(action: {}) {
-                Text("STOP")
+            //            VStack(alignment: .center) {
+            //                Button(action: { print()}) {
+            //                    Text("STOP")
+            //                        .padding(.vertical, 5)
+            //                        .frame(maxWidth: .infinity, minHeight: 45, maxHeight: .infinity)
+            //                }
+            //                .font(.title3)
+            //                .foregroundStyle(.red)
+            //                .padding(20.0)
+            //                .foregroundColor(.blue)
+            //                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            //            }
+            //            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            //            .padding(.vertical, 10.0)
+            //            .padding(.horizontal, 45.0)
+            Button(action: {
+                testManager = TestManager(total: 4, current: 0)
+                //                debugPrint("Intel MKL Error. DEBUG=0X005")
+                //                fatalError("You click on the start button")
+            }) {
+                Text("START")
                     .font(.system(size: 13.0))
                     .fontWeight(.medium)
                     .padding(22)
                     .frame(height: 25)
                     .frame(maxWidth: .infinity)
-                    .foregroundStyle(.red)
-//                    .background(Color.blue)
-//                    .foregroundColor(Color.white)
+                //                    .foregroundStyle(.red)
+                //                    .background(Color.blue)
+                //                    .foregroundColor(Color.white)
             }.frame(height: 30)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 10.0)
                 .padding(.horizontal, 45.0)
-//             .background(Color.cle).cornerRadius(5)
+            //             .background(Color.cle).cornerRadius(5)
             
             
             ConvertProgressView()
@@ -61,20 +66,33 @@ struct VideoFile: Identifiable {
     let path: String
 }
 
+
 struct InputVideo: View {
     @State private var files = [
         VideoFile(id: 1, name: "sample.mp4", path: "~/Desktop/My Videos/sample.mp4"),
-        VideoFile(id: 2, name: "testing.mov", path: "~/Desktop/My Videos/testing.mp4"),
-//                VideoFile(id: 3, name: "testing.mov", path: "80"),
-//                VideoFile(id: 4, name: "testing.mov", path: "80"),
-//                VideoFile(id: 5, name: "testing.mov", path: "80"),
-//                VideoFile(id: 6, name: "testing.mov", path: "80"),
-//                VideoFile(id: 7, name: "testing.mov", path: "80"),
-//                VideoFile(id: 8, name: "testing.mov", path: "80"),
-//                VideoFile(id: 9, name: "Adele Adkins", path: "85")
+//        VideoFile(id: 2, name: "testing.mov", path: "~/Desktop/My Videos/testing.mp4"),
+        //                VideoFile(id: 3, name: "testing.mov", path: "80"),
+        //                VideoFile(id: 4, name: "testing.mov", path: "80"),
+        //                VideoFile(id: 5, name: "testing.mov", path: "80"),
+        //                VideoFile(id: 6, name: "testing.mov", path: "80"),
+        //                VideoFile(id: 7, name: "testing.mov", path: "80"),
+        //                VideoFile(id: 8, name: "testing.mov", path: "80"),
+        //                VideoFile(id: 9, name: "Adele Adkins", path: "85")
     ]
     
+    func isVideoExist(pathToCheck: String) -> Bool {
+        for item in files {
+            if pathToCheck == item.path {
+                return true
+            }
+        }
+        return false
+    }
+    
     @State private var selection = Set<VideoFile.ID>() // <-- Use this for multiple rows selections
+    @State private var dragOver = false
+
+    let allowVideoExtensions = ["mp4", "mov"]
     
     var body: some View {
         VStack(alignment: .trailing, spacing: 5) {
@@ -82,40 +100,67 @@ struct InputVideo: View {
                 .font(.system(.body))
                 .fontWeight(.bold)
                 .frame(maxWidth: .infinity, alignment: .leading)
-            VStack {
-                Table(files, selection: $selection) {
-                    TableColumn("Name", value: \.name)
-                    
-                    //                TableColumn("") { file in
-                    //                    Text(String(file.path))
-                    //                }
-                }
-//                .offset(y: -27)
-                .opacity(0.85)
-            }
-            .clipped()
-            .cornerRadius(8)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color(red: 0.29, green: 0.57, blue: 0.97), lineWidth: 1))
             
-            //            VStack(alignment: .center, spacing: 20) {
-            //                Image(systemName: "plus.circle")
-            //                    .resizable()
-            //                    .frame(width: 64, height: 64)
-            //                    .foregroundColor(.blue)
-            //                Text("Drop your videos here")
-            //                    .font(.custom("Inter", size: 13))
-            //                    .foregroundColor(Color(red: 0, green: 0, blue: 0, opacity: 0.35))
-            //            }
-            //            .padding(.all, 20)
-            //            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            ////            .frame(height: 196)
-            //            .cornerRadius(10)
-            //            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color(red: 0.29, green: 0.57, blue: 0.97), lineWidth: 1))
+            VStack(alignment: .center, spacing: files.count > 1 ? 0 : 20) {
+                if files.count > 1 {
+                    VStack {
+                        Table(files, selection: $selection) {
+                            TableColumn("Name", value: \.name)
+                            
+                            //                TableColumn("") { file in
+                            //                    Text(String(file.path))
+                            //                }
+                        }
+                        //                .offset(y: -27)
+                        .opacity(0.85)
+                    }
+                }
+                else {
+                    Image(systemName: "plus.circle")
+                        .resizable()
+                        .frame(width: 64, height: 64)
+                        .foregroundColor(.blue)
+                    Text("Drop your videos here")
+                        .font(.custom("Inter", size: 13))
+                        .foregroundColor(Color(red: 0, green: 0, blue: 0, opacity: 0.35))
+                }
+            }
+            .padding(.all, files.count > 1 ? 0 : 20)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .cornerRadius(10)
+            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color(red: 0.29, green: 0.57, blue: 0.97), lineWidth: 1))
+            .onDrop(of: ["public.file-url"], isTargeted: $dragOver) { providers -> Bool in
+                for provider in providers {
+                    provider.loadDataRepresentation(forTypeIdentifier: "public.file-url", completionHandler: { (data, error) in
+                        if let data = data, let path = NSString(data: data, encoding: 4), let url = URL(string: path as String) {
+                            if (allowVideoExtensions.contains(url.pathExtension) && isVideoExist(pathToCheck: url.path) == false) {
+                                
+                                let newVideo = VideoFile(id: files.count, name: url.lastPathComponent, path: url.path)
+                                
+                                files.append(newVideo)
+                                print("NEW PATH::")
+                                debugPrint(url)
+        //                        let image = NSImage(contentsOf: url)
+    //                            DispatchQueue.main.async {
+    //    //                            self.image = image
+    //                                print("Do anything!!")
+    //                            }
+                            }
+                            else {
+                                print("This file type is not supported.")
+                            }
+                           
+                        }
+                    })
+                }
+                
+                return true
+            }
+            
             Button("Clear all") {
                 
             }
-
+            
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         //        .background(Color(red: 1, green: 1, blue: 1))
@@ -143,14 +188,17 @@ struct RenderSettingView: View {
 
 struct ConvertProgressView: View {
     @State private var downloadAmount = 0.0
+    private let TOTAL = 100.0
+    @State var currentProgress = 0.0
     
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
             VStack(alignment: .leading, spacing: 5) {
                 Text("Current progress")
                 HStack(alignment: .center, spacing: 10) {
-                    ProgressView(value: 50, total: 100)
+                    ProgressView(value: 50, total: TOTAL)
                         .tint(.green)
+                    
                     Text("50%")
                         .fontWeight(.bold)
                 }
@@ -165,7 +213,7 @@ struct ConvertProgressView: View {
                 Text("Total progress")
                     .fontWeight(.bold)
                 HStack(alignment: .center, spacing: 10) {
-                    ProgressView(value: 75, total: 100)
+                    ProgressView(value: 75, total: TOTAL)
                         .tint(.green)
                     Text("75%")
                         .fontWeight(.bold)
@@ -191,7 +239,7 @@ struct DestinationView: View {
                     VStack {
                         HStack() {
                             TextField("", text: $outputPath)
-//                                .opacity(0.85)
+                            //                                .opacity(0.85)
                                 .disabled(true)
                             Button("Browse") {
                                 
@@ -216,7 +264,7 @@ struct DestinationView: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-
+        
     }
 }
 
@@ -261,7 +309,7 @@ struct ContentView_Previews: PreviewProvider {
         
         ContentView()
             .frame(width: 616, height: 616)
-//            .preferredColorScheme(.light)
+        //            .preferredColorScheme(.light)
         //        ConvertProgressView().preferredColorScheme(.dark)
     }
 }
