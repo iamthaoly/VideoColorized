@@ -10,7 +10,7 @@ import SwiftUI
 public struct ContentView: View {
     @State var isDisplayCompletedAlert = false
 
-    @State var testManager: TestManager = TestManager.shared
+    @ObservedObject var testManager: TestManager
 
     @State private var isSameAsSource = false
     
@@ -25,6 +25,10 @@ public struct ContentView: View {
         //                VideoFile(id: 8, name: "testing.mov", path: "80"),
         //                VideoFile(id: 9, name: "Adele Adkins", path: "85")
     ]
+    
+    init() {
+        self.testManager = TestManager.shared
+    }
     
     public var body: some View {
         VStack(alignment: .center, spacing: 20) {
@@ -54,7 +58,7 @@ public struct ContentView: View {
 //                isDisplayCompletedAlert = true
                 // Display popup
                 print("Increase current!")
-                testManager.current += 2
+                testManager.increase()
             }) {
                 Text("START")
                     .font(.system(size: 13.0))
@@ -80,7 +84,7 @@ public struct ContentView: View {
                 Button("OK") { }
             }
             
-            ConvertProgressView(manager: $testManager)
+            ConvertProgressView(current: self.$testManager.current)
             
         }
         .padding(.horizontal, 30)
@@ -208,19 +212,21 @@ struct RenderSettingView: View {
 }
 
 struct ConvertProgressView: View {
+    
     private let TOTAL = 100.0
-    @State var currentProgress = 0.0
-    @Binding var manager: TestManager
+    @Binding var current: Double
+    
+//    var manager: TestManager
     
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
             VStack(alignment: .leading, spacing: 5) {
                 Text("Current progress")
                 HStack(alignment: .center, spacing: 10) {
-                    ProgressView(value: CGFloat(manager.current), total: TOTAL)
+                    ProgressView(value: CGFloat(current), total: TOTAL)
                         .tint(.green)
                     
-                    Text(String(manager.current) + "%")
+                    Text(String(current) + "%")
                         .fontWeight(.bold)
                 }
                 .frame(maxWidth: .infinity)
@@ -234,10 +240,10 @@ struct ConvertProgressView: View {
                 Text("Total progress")
                     .fontWeight(.bold)
                 HStack(alignment: .center, spacing: 10) {
-                    ProgressView(value: CGFloat(manager.total), total: TOTAL)
+                    ProgressView(value: CGFloat(TOTAL), total: TOTAL)
                         .tint(.green)
 //                    Text("75%")
-                    Text(String(manager.total) + "%")
+                    Text(String(TOTAL) + "%")
                         .fontWeight(.bold)
                 }
                 .frame(maxWidth: .infinity)

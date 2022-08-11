@@ -7,9 +7,9 @@
 
 import Foundation
 
-class TestManager {
+class TestManager: ObservableObject {
     var total: Int
-    var current: Int
+    @Published var current: Double
     
 //    var currentProgress: Float? = 0.5
 //    var totalProgress: Float? = 0.75
@@ -21,13 +21,17 @@ class TestManager {
         current = 0
     }
     
-    private init(total: Int, current: Int) {
+    private init(total: Int, current: Double) {
         self.total = total
         self.current = current
     }
     
     func count() {
         Timer()
+    }
+    
+    func increase() {
+            current += 10
     }
     
     func runProcess() {
