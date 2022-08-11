@@ -11,11 +11,17 @@ class TestManager {
     var total: Int
     var current: Int
     
-    var currentProgress: Float? = 0.5
-    var totalProgress: Float? = 0.75
+//    var currentProgress: Float? = 0.5
+//    var totalProgress: Float? = 0.75
     
+    static let shared = TestManager()
+
+    private init() {
+        total = 0
+        current = 0
+    }
     
-    init(total: Int, current: Int) {
+    private init(total: Int, current: Int) {
         self.total = total
         self.current = current
     }

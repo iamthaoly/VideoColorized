@@ -10,7 +10,8 @@ import SwiftUI
 public struct ContentView: View {
     @State var isDisplayCompletedAlert = false
 
-    @State var testManager: TestManager?
+    @State var testManager: TestManager = TestManager.shared
+
     @State private var isSameAsSource = false
     
     @State private var files = [
@@ -50,9 +51,10 @@ public struct ContentView: View {
 //                //                debugPrint("Intel MKL Error. DEBUG=0X005")
 //                //                fatalError("You click on the start button")
 //                testManager?.runProcess()
-                isDisplayCompletedAlert = true
+//                isDisplayCompletedAlert = true
                 // Display popup
-                
+                print("Increase current!")
+                testManager.current += 2
             }) {
                 Text("START")
                     .font(.system(size: 13.0))
@@ -70,14 +72,15 @@ public struct ContentView: View {
             .padding(.horizontal, 45.0)
             .alert("Converting completed", isPresented: $isDisplayCompletedAlert) {
                 if isSameAsSource {
-                    Button("Open destination folder") {
-                        // TODO: Open destination folder
-                    }
+                    // TODO: Open destination folder
+//                    Button("Open destination folder") {
+//
+//                    }
                 }
                 Button("OK") { }
             }
             
-            ConvertProgressView()
+            ConvertProgressView(manager: $testManager)
             
         }
         .padding(.horizontal, 30)
@@ -205,19 +208,19 @@ struct RenderSettingView: View {
 }
 
 struct ConvertProgressView: View {
-    @State private var downloadAmount = 0.0
     private let TOTAL = 100.0
     @State var currentProgress = 0.0
+    @Binding var manager: TestManager
     
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
             VStack(alignment: .leading, spacing: 5) {
                 Text("Current progress")
                 HStack(alignment: .center, spacing: 10) {
-                    ProgressView(value: 50, total: TOTAL)
+                    ProgressView(value: CGFloat(manager.current), total: TOTAL)
                         .tint(.green)
                     
-                    Text("50%")
+                    Text(String(manager.current) + "%")
                         .fontWeight(.bold)
                 }
                 .frame(maxWidth: .infinity)
@@ -231,9 +234,10 @@ struct ConvertProgressView: View {
                 Text("Total progress")
                     .fontWeight(.bold)
                 HStack(alignment: .center, spacing: 10) {
-                    ProgressView(value: 75, total: TOTAL)
+                    ProgressView(value: CGFloat(manager.total), total: TOTAL)
                         .tint(.green)
-                    Text("75%")
+//                    Text("75%")
+                    Text(String(manager.total) + "%")
                         .fontWeight(.bold)
                 }
                 .frame(maxWidth: .infinity)

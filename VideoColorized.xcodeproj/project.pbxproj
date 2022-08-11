@@ -11,7 +11,7 @@
 		082BDE2428854B12004AADC3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082BDE2328854B12004AADC3 /* ContentView.swift */; };
 		082BDE2628854B14004AADC3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 082BDE2528854B14004AADC3 /* Assets.xcassets */; };
 		082BDE2928854B14004AADC3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 082BDE2828854B14004AADC3 /* Preview Assets.xcassets */; };
-		0842AE51288BCDD600829C1E /* TestProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0842AE50288BCDD600829C1E /* TestProgress.swift */; };
+		0885C82928A4B1F4007B98CD /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0885C82828A4B1F4007B98CD /* HomeScreen.swift */; };
 		0887EB5628A33D68006B65E3 /* script.sh in Resources */ = {isa = PBXBuildFile; fileRef = 0887EB5528A33D68006B65E3 /* script.sh */; };
 		08A5E11028A0206000129D6B /* requirements.txt in Resources */ = {isa = PBXBuildFile; fileRef = 08A5E10D28A0206000129D6B /* requirements.txt */; };
 		08A5E11128A0206000129D6B /* main.py in Resources */ = {isa = PBXBuildFile; fileRef = 08A5E10E28A0206000129D6B /* main.py */; };
@@ -26,7 +26,7 @@
 		082BDE2528854B14004AADC3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		082BDE2828854B14004AADC3 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		082BDE2A28854B14004AADC3 /* VideoColorized.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VideoColorized.entitlements; sourceTree = "<group>"; };
-		0842AE50288BCDD600829C1E /* TestProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestProgress.swift; sourceTree = "<group>"; };
+		0885C82828A4B1F4007B98CD /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
 		0887EB5528A33D68006B65E3 /* script.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = script.sh; sourceTree = "<group>"; };
 		08A5E10D28A0206000129D6B /* requirements.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = requirements.txt; sourceTree = "<group>"; };
 		08A5E10E28A0206000129D6B /* main.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = main.py; sourceTree = "<group>"; };
@@ -65,12 +65,12 @@
 			isa = PBXGroup;
 			children = (
 				08A5E10C28A0205F00129D6B /* PyOnMac */,
-				082BDE2128854B12004AADC3 /* VideoColorizedApp.swift */,
-				082BDE2328854B12004AADC3 /* ContentView.swift */,
+				0885C82A28A4B1FA007B98CD /* Screens */,
+				0885C82728A4B182007B98CD /* Views */,
 				082BDE2528854B14004AADC3 /* Assets.xcassets */,
 				082BDE2A28854B14004AADC3 /* VideoColorized.entitlements */,
 				082BDE2728854B14004AADC3 /* Preview Content */,
-				0842AE50288BCDD600829C1E /* TestProgress.swift */,
+				082BDE2128854B12004AADC3 /* VideoColorizedApp.swift */,
 				08BD982C289FDD4100F3A140 /* TestManager.swift */,
 			);
 			path = VideoColorized;
@@ -82,6 +82,22 @@
 				082BDE2828854B14004AADC3 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		0885C82728A4B182007B98CD /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				082BDE2328854B12004AADC3 /* ContentView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		0885C82A28A4B1FA007B98CD /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				0885C82828A4B1F4007B98CD /* HomeScreen.swift */,
+			);
+			path = Screens;
 			sourceTree = "<group>";
 		};
 		08A5E10C28A0205F00129D6B /* PyOnMac */ = {
@@ -169,8 +185,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0885C82928A4B1F4007B98CD /* HomeScreen.swift in Sources */,
 				082BDE2428854B12004AADC3 /* ContentView.swift in Sources */,
-				0842AE51288BCDD600829C1E /* TestProgress.swift in Sources */,
 				082BDE2228854B12004AADC3 /* VideoColorizedApp.swift in Sources */,
 				08BD982D289FDD4200F3A140 /* TestManager.swift in Sources */,
 			);

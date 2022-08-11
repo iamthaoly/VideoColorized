@@ -11,7 +11,7 @@ import SwiftUI
 struct VideoColorizedApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            HomeScreen()
         }
     }
 }
