@@ -8,8 +8,11 @@
 import SwiftUI
 
 public struct ContentView: View {
-    
+    @State var isDisplayCompletedAlert = false
+
     @State var testManager: TestManager?
+    @State private var isSameAsSource = false
+    
     @State private var files = [
         VideoFile(id: 1, name: "sample.mp4", path: "~/Desktop/My Videos/sample.mp4"),
 //        VideoFile(id: 2, name: "testing.mov", path: "~/Desktop/My Videos/testing.mp4"),
@@ -25,7 +28,7 @@ public struct ContentView: View {
     public var body: some View {
         VStack(alignment: .center, spacing: 20) {
             InputVideo(files: $files)
-            DestinationView()
+            DestinationView(isSameAsSource: $isSameAsSource)
             RenderSettingView()
             //            VStack(alignment: .center) {
             //                Button(action: { print()}) {
@@ -43,10 +46,13 @@ public struct ContentView: View {
             //            .padding(.vertical, 10.0)
             //            .padding(.horizontal, 45.0)
             Button(action: {
-                testManager = TestManager(total: 4, current: 0)
-                //                debugPrint("Intel MKL Error. DEBUG=0X005")
-                //                fatalError("You click on the start button")
-                testManager?.runProcess()
+//                testManager = TestManager(total: 4, current: 0)
+//                //                debugPrint("Intel MKL Error. DEBUG=0X005")
+//                //                fatalError("You click on the start button")
+//                testManager?.runProcess()
+                isDisplayCompletedAlert = true
+                // Display popup
+                
             }) {
                 Text("START")
                     .font(.system(size: 13.0))
@@ -57,17 +63,26 @@ public struct ContentView: View {
                 //                    .foregroundStyle(.red)
                 //                    .background(Color.blue)
                 //                    .foregroundColor(Color.white)
-            }.frame(height: 30)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 10.0)
-                .padding(.horizontal, 45.0)
-            //             .background(Color.cle).cornerRadius(5)
-            
+            }
+            .frame(height: 30)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 10.0)
+            .padding(.horizontal, 45.0)
+            .alert("Converting completed", isPresented: $isDisplayCompletedAlert) {
+                if isSameAsSource {
+                    Button("Open destination folder") {
+                        // TODO: Open destination folder
+                    }
+                }
+                Button("OK") { }
+            }
             
             ConvertProgressView()
+            
         }
         .padding(.horizontal, 30)
         .padding(.vertical, 20)
+        
     }
 }
 
@@ -233,8 +248,9 @@ struct ConvertProgressView: View {
 }
 
 struct DestinationView: View {
-    @State private var isOn: Bool = false
+    @Binding var isSameAsSource: Bool
     @State private var outputPath: String = "~/Desktop/My Videos/"
+    
     var body: some View {
         VStack(alignment: .leading) {
             ZStack(alignment: .topLeading) {
@@ -254,7 +270,7 @@ struct DestinationView: View {
                         .frame(maxWidth: .infinity)
                         .padding(.all, 10.0)
                         
-                        Toggle(isOn: $isOn) {
+                        Toggle(isOn: $isSameAsSource) {
                             Text("Same as source")
                         }
                         .padding(.bottom, 15.0)
