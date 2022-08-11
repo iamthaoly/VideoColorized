@@ -10,10 +10,21 @@ import SwiftUI
 public struct ContentView: View {
     
     @State var testManager: TestManager?
+    @State private var files = [
+        VideoFile(id: 1, name: "sample.mp4", path: "~/Desktop/My Videos/sample.mp4"),
+//        VideoFile(id: 2, name: "testing.mov", path: "~/Desktop/My Videos/testing.mp4"),
+        //                VideoFile(id: 3, name: "testing.mov", path: "80"),
+        //                VideoFile(id: 4, name: "testing.mov", path: "80"),
+        //                VideoFile(id: 5, name: "testing.mov", path: "80"),
+        //                VideoFile(id: 6, name: "testing.mov", path: "80"),
+        //                VideoFile(id: 7, name: "testing.mov", path: "80"),
+        //                VideoFile(id: 8, name: "testing.mov", path: "80"),
+        //                VideoFile(id: 9, name: "Adele Adkins", path: "85")
+    ]
     
     public var body: some View {
         VStack(alignment: .center, spacing: 20) {
-            InputVideo()
+            InputVideo(files: $files)
             DestinationView()
             RenderSettingView()
             //            VStack(alignment: .center) {
@@ -35,6 +46,7 @@ public struct ContentView: View {
                 testManager = TestManager(total: 4, current: 0)
                 //                debugPrint("Intel MKL Error. DEBUG=0X005")
                 //                fatalError("You click on the start button")
+                testManager?.runProcess()
             }) {
                 Text("START")
                     .font(.system(size: 13.0))
@@ -68,17 +80,8 @@ struct VideoFile: Identifiable {
 
 
 struct InputVideo: View {
-    @State private var files = [
-        VideoFile(id: 1, name: "sample.mp4", path: "~/Desktop/My Videos/sample.mp4"),
-//        VideoFile(id: 2, name: "testing.mov", path: "~/Desktop/My Videos/testing.mp4"),
-        //                VideoFile(id: 3, name: "testing.mov", path: "80"),
-        //                VideoFile(id: 4, name: "testing.mov", path: "80"),
-        //                VideoFile(id: 5, name: "testing.mov", path: "80"),
-        //                VideoFile(id: 6, name: "testing.mov", path: "80"),
-        //                VideoFile(id: 7, name: "testing.mov", path: "80"),
-        //                VideoFile(id: 8, name: "testing.mov", path: "80"),
-        //                VideoFile(id: 9, name: "Adele Adkins", path: "85")
-    ]
+
+    @Binding var files: [VideoFile]
     
     func isVideoExist(pathToCheck: String) -> Bool {
         for item in files {
@@ -158,7 +161,7 @@ struct InputVideo: View {
             }
             
             Button("Clear all") {
-                
+                files.removeAll()
             }
             
         }

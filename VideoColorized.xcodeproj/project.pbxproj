@@ -12,6 +12,7 @@
 		082BDE2628854B14004AADC3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 082BDE2528854B14004AADC3 /* Assets.xcassets */; };
 		082BDE2928854B14004AADC3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 082BDE2828854B14004AADC3 /* Preview Assets.xcassets */; };
 		0842AE51288BCDD600829C1E /* TestProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0842AE50288BCDD600829C1E /* TestProgress.swift */; };
+		0887EB5628A33D68006B65E3 /* script.sh in Resources */ = {isa = PBXBuildFile; fileRef = 0887EB5528A33D68006B65E3 /* script.sh */; };
 		08A5E11028A0206000129D6B /* requirements.txt in Resources */ = {isa = PBXBuildFile; fileRef = 08A5E10D28A0206000129D6B /* requirements.txt */; };
 		08A5E11128A0206000129D6B /* main.py in Resources */ = {isa = PBXBuildFile; fileRef = 08A5E10E28A0206000129D6B /* main.py */; };
 		08A5E11228A0206000129D6B /* skills.png in Resources */ = {isa = PBXBuildFile; fileRef = 08A5E10F28A0206000129D6B /* skills.png */; };
@@ -26,6 +27,7 @@
 		082BDE2828854B14004AADC3 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		082BDE2A28854B14004AADC3 /* VideoColorized.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VideoColorized.entitlements; sourceTree = "<group>"; };
 		0842AE50288BCDD600829C1E /* TestProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestProgress.swift; sourceTree = "<group>"; };
+		0887EB5528A33D68006B65E3 /* script.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = script.sh; sourceTree = "<group>"; };
 		08A5E10D28A0206000129D6B /* requirements.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = requirements.txt; sourceTree = "<group>"; };
 		08A5E10E28A0206000129D6B /* main.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = main.py; sourceTree = "<group>"; };
 		08A5E10F28A0206000129D6B /* skills.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = skills.png; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 				08A5E10D28A0206000129D6B /* requirements.txt */,
 				08A5E10E28A0206000129D6B /* main.py */,
 				08A5E10F28A0206000129D6B /* skills.png */,
+				0887EB5528A33D68006B65E3 /* script.sh */,
 			);
 			path = PyOnMac;
 			sourceTree = "<group>";
@@ -151,6 +154,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				08A5E11028A0206000129D6B /* requirements.txt in Resources */,
+				0887EB5628A33D68006B65E3 /* script.sh in Resources */,
 				08A5E11228A0206000129D6B /* skills.png in Resources */,
 				082BDE2928854B14004AADC3 /* Preview Assets.xcassets in Resources */,
 				082BDE2628854B14004AADC3 /* Assets.xcassets in Resources */,
@@ -308,6 +312,13 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/VideoColorized/PyOnMac/venv/lib/python3.10/site-packages/cv2/.dylibs",
+					"$(PROJECT_DIR)/VideoColorized/PyOnMac/venv/lib/python3.10/site-packages/numpy/core/lib",
+					"$(PROJECT_DIR)/VideoColorized/PyOnMac/venv/lib/python3.10/site-packages/numpy/.dylibs",
+					"$(PROJECT_DIR)/VideoColorized/PyOnMac/venv/lib/python3.10/site-packages/numpy/random/lib",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = dev.lytran.VideoColorized;
@@ -336,6 +347,13 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/VideoColorized/PyOnMac/venv/lib/python3.10/site-packages/cv2/.dylibs",
+					"$(PROJECT_DIR)/VideoColorized/PyOnMac/venv/lib/python3.10/site-packages/numpy/core/lib",
+					"$(PROJECT_DIR)/VideoColorized/PyOnMac/venv/lib/python3.10/site-packages/numpy/.dylibs",
+					"$(PROJECT_DIR)/VideoColorized/PyOnMac/venv/lib/python3.10/site-packages/numpy/random/lib",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
