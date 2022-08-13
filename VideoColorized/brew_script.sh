@@ -52,9 +52,7 @@ main() {
     install_brew
     install_python
     install_ffmpeg
-    clone_repo
-    install_requirements
-    echo "Install completed!"
+   
 }
 
 main
