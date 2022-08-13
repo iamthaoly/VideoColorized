@@ -10,10 +10,11 @@ install_requirements() {
     echo "----------------------"
     echo "Install the requirements..."
     cd colorized-python
-    python3 -m venv venv
-    source venv/bin/activate
-    pip3 install -r requirements.txt
     
+    echo "Create a virtual environment"
+    python3 -m venv venv
+    ./venv/bin/activate
+    pip3 install -r requirements.txt
     pip3 install --no-deps fastai==1.0.60
 }
 
