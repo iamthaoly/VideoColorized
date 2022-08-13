@@ -32,6 +32,7 @@ clone_repo() {
 }
 
 install_requirements() {
+    cd colorized-python
     pip3 -m venv venv
     source venv/bin/activate
     pip3 install -r requirements.txt
@@ -41,7 +42,7 @@ install_requirements() {
 
 main() {
 
+    echo "Install completed!"
 }
 
 main
-
