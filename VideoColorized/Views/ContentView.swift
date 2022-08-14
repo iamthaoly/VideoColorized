@@ -81,11 +81,10 @@ public struct ContentView: View {
                 if isSameAsSource {
                     // TODO: Open destination folder
                     //                    Button("Open destination folder") {
-                    //
                     //                    }
                 }
                 return Alert(title: Text("Convert completed"), primaryButton: .default(Text("OK")), secondaryButton: .default(Text("Cancel")))
-                //                Button("OK") { }
+//                                Button("OK") { }
             }
             
             ConvertProgressView(current: self.$testManager.current)
@@ -93,10 +92,6 @@ public struct ContentView: View {
                     Text(testManager.terminalString)
                         .multilineTextAlignment(.leading)
                         .fixedSize(horizontal: false, vertical: true)
-               
-//                Text(testManager.terminalString)
-//                    .multilineTextAlignment(.leading)
-//                    .fixedSize(horizontal: false, vertical: true)
             }
             .frame(maxWidth: .infinity)
             
@@ -105,13 +100,6 @@ public struct ContentView: View {
         .padding(.vertical, 20)
         
     }
-}
-
-
-struct VideoFile: Identifiable {
-    let id: Int
-    let name: String
-    let path: String
 }
 
 
@@ -218,11 +206,6 @@ struct InputVideo: View {
                                 files.append(newVideo)
                                 print("NEW PATH::")
                                 debugPrint(url)
-        //                        let image = NSImage(contentsOf: url)
-    //                            DispatchQueue.main.async {
-    //    //                            self.image = image
-    //                                print("Do anything!!")
-    //                            }
                             }
                             else {
                                 print("This file type is not supported.")
@@ -282,7 +265,7 @@ struct ConvertProgressView: View {
                     } else {
                         // Fallback on earlier versions
                         ProgressView(value: CGFloat(current), total: TOTAL)
-                            .progressViewStyle(CircularProgressViewStyle(tint: Color.green))
+                            .progressViewStyle(LinearProgressViewStyle(tint: Color.green))
                     }
                     
                     Text(String(current) + "%")
@@ -305,8 +288,7 @@ struct ConvertProgressView: View {
                     } else {
                         // Fallback on earlier versions
                         ProgressView(value: CGFloat(TOTAL), total: TOTAL)
-                            .progressViewStyle(CircularProgressViewStyle(tint: Color.green))
-
+                            .progressViewStyle(LinearProgressViewStyle(tint: Color.green))
                     }
 //                    Text("75%")
                     Text(String(TOTAL) + "%")
@@ -325,7 +307,7 @@ struct ConvertProgressView: View {
 
 struct DestinationView: View {
     @Binding var isSameAsSource: Bool
-    @State private var outputPath: String = "~/Desktop/My Videos/"
+    @State private var outputPath: String = "~/Desktop/"
     
     var body: some View {
         VStack(alignment: .leading) {

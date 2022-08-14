@@ -25,9 +25,14 @@ install_requirements() {
 download_models() {
     echo "Current dir"
     pwd
-    mkdir -p 'models'
-    
-    echo "Model file is not existed. Downloading..."
+#    mkdir -p 'models'
+#
+#    echo "Model file is not existed. Downloading..."
+}
+
+runConvert() {
+    cd $HOME/colorized-python
+    python3 runner.py
 }
 
 main() {
@@ -37,4 +42,3 @@ main() {
 }
 
 main
-

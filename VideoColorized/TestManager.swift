@@ -12,7 +12,7 @@ class TestManager: ObservableObject {
     @Published var current: Double
     @Published var terminalString: String = ""
     
-    let PYTHON_PATH = "/Users/ly/colorized-python"
+    let PYTHON_PATH = FileManager.default.homeDirectoryForCurrentUser.path + "/colorized-python"
 //    var currentProgress: Float? = 0.5
 //    var totalProgress: Float? = 0.75
     
@@ -67,15 +67,9 @@ class TestManager: ObservableObject {
         let output = input.runAsCommand()
         print(output)
 
-        
-//        let url = URL(fileURLWithPath: "main.py", relativeTo: Bundle.main.resourceURL)
-//        let input = "python3 " + url.path
-//        let output = input.runAsCommand()
-//        print(output)
     }
     
     private func runPythonScript() -> String {
-        
         let runnerPath = PYTHON_PATH + "/" + "runner.py"
         let command = "python3 " + runnerPath
         
@@ -88,7 +82,7 @@ class TestManager: ObservableObject {
         let envCommand = ". $HOME/colorized-python/venv/bin/activate"
         let res = envCommand.runAsCommand()
         debugPrint(res)
-        updateString(res)
+        updateString(res + "\n")
         
         let runnerPath = PYTHON_PATH + "/" + "runner.py"
         let command = "python3 " + runnerPath
@@ -96,11 +90,12 @@ class TestManager: ObservableObject {
         print("Command: ")
         print(command)
         let task = Process()
-        updateString("\n" + command)
+        updateString(command + "\n")
 
 
         task.launchPath = "/bin/sh"
         task.arguments = ["-c", envCommand + " ; " + command]
+//        task.arguments = ["-c", "echo 1 ; sleep 1 ; echo 2 ; sleep 1 ; echo 3 ; sleep 1 ; echo 4"]
 
         let pipe = Pipe()
         task.standardOutput = pipe
@@ -111,9 +106,8 @@ class TestManager: ObservableObject {
                 // Update your view with the new text here
                 if line != "" && line.count > 0 {
                     print("New output: \(line)")
-                    self.updateString ("New output + \n")
-
-                    self.updateString ("\n" + line)
+                    self.updateString ("New output \n")
+                    self.updateString (line)
                 }
 
             } else {

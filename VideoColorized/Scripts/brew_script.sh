@@ -27,19 +27,19 @@ install_ffmpeg() {
     echo "3. ffmpeg"
     echo "Installing ffmpeg"
     brew install ffmpeg
-}
+    }
 
-install_cmake() {
-    echo "----------------------"
-    echo "4. cmake"
-    echo "Installing cmake"
-    brew install cmake
-}
+    install_cmake() {
+        echo "----------------------"
+        echo "4. cmake"
+        echo "Installing cmake"
+        brew install cmake
+    }
 
-main() {
-    install_brew
-    install_python
-    install_ffmpeg
+    main() {
+        install_brew
+        install_python
+        install_ffmpeg
     install_cmake
 }
 

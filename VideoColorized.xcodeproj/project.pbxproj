@@ -15,6 +15,7 @@
 		086BABCC28A7BED200123025 /* reset_all.sh in Resources */ = {isa = PBXBuildFile; fileRef = 086BABCB28A7BECF00123025 /* reset_all.sh */; };
 		0885C82928A4B1F4007B98CD /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0885C82828A4B1F4007B98CD /* HomeScreen.swift */; };
 		08A3C56128A8C69D008BC9E6 /* MyTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A3C56028A8C69D008BC9E6 /* MyTableView.swift */; };
+		08A3C56328A8D579008BC9E6 /* VideoFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A3C56228A8D579008BC9E6 /* VideoFile.swift */; };
 		08BD982D289FDD4200F3A140 /* TestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08BD982C289FDD4100F3A140 /* TestManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -30,6 +31,7 @@
 		086BABCB28A7BECF00123025 /* reset_all.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = reset_all.sh; sourceTree = "<group>"; };
 		0885C82828A4B1F4007B98CD /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
 		08A3C56028A8C69D008BC9E6 /* MyTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTableView.swift; sourceTree = "<group>"; };
+		08A3C56228A8D579008BC9E6 /* VideoFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoFile.swift; sourceTree = "<group>"; };
 		08BD982C289FDD4100F3A140 /* TestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -63,6 +65,7 @@
 		082BDE2028854B12004AADC3 /* VideoColorized */ = {
 			isa = PBXGroup;
 			children = (
+				08A3C56428A8D582008BC9E6 /* Models */,
 				0885C82A28A4B1FA007B98CD /* Screens */,
 				0885C82728A4B182007B98CD /* Views */,
 				082BDE2528854B14004AADC3 /* Assets.xcassets */,
@@ -70,9 +73,7 @@
 				082BDE2728854B14004AADC3 /* Preview Content */,
 				082BDE2128854B12004AADC3 /* VideoColorizedApp.swift */,
 				08BD982C289FDD4100F3A140 /* TestManager.swift */,
-				086BABCB28A7BECF00123025 /* reset_all.sh */,
-				086BABC828A7BD3E00123025 /* brew_script.sh */,
-				086BABCA28A7BD7800123025 /* init_script.sh */,
+				08A3C56528A8F254008BC9E6 /* Scripts */,
 			);
 			path = VideoColorized;
 			sourceTree = "<group>";
@@ -100,6 +101,24 @@
 				0885C82828A4B1F4007B98CD /* HomeScreen.swift */,
 			);
 			path = Screens;
+			sourceTree = "<group>";
+		};
+		08A3C56428A8D582008BC9E6 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				08A3C56228A8D579008BC9E6 /* VideoFile.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		08A3C56528A8F254008BC9E6 /* Scripts */ = {
+			isa = PBXGroup;
+			children = (
+				086BABCB28A7BECF00123025 /* reset_all.sh */,
+				086BABC828A7BD3E00123025 /* brew_script.sh */,
+				086BABCA28A7BD7800123025 /* init_script.sh */,
+			);
+			path = Scripts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -177,6 +196,7 @@
 				0885C82928A4B1F4007B98CD /* HomeScreen.swift in Sources */,
 				08A3C56128A8C69D008BC9E6 /* MyTableView.swift in Sources */,
 				082BDE2428854B12004AADC3 /* ContentView.swift in Sources */,
+				08A3C56328A8D579008BC9E6 /* VideoFile.swift in Sources */,
 				082BDE2228854B12004AADC3 /* VideoColorizedApp.swift in Sources */,
 				08BD982D289FDD4200F3A140 /* TestManager.swift in Sources */,
 			);
