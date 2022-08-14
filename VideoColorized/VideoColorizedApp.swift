@@ -9,9 +9,19 @@ import SwiftUI
 
 @main
 struct VideoColorizedApp: App {
+    var goHome = false
     var body: some Scene {
         WindowGroup {
-            HomeScreen()
+            if (goHome) {
+                HomeScreen()
+                    .navigationTitle("Homescreen")
+            }
+            else {
+                InstallerScreen()
+                    .navigationTitle("Installer")
+            }
+            
         }
+            
     }
 }
