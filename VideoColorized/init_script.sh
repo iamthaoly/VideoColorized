@@ -7,7 +7,7 @@ clone_repo() {
 }
 
 activate() {
-    sudo . $HOME/colorized-python/venv/bin/activate
+    . $HOME/colorized-python/venv/bin/activate
 }
 
 install_requirements() {
@@ -22,6 +22,14 @@ install_requirements() {
     pip3 install --no-deps fastai==1.0.60
 }
 
+download_models() {
+    echo "Current dir"
+    pwd
+    mkdir -p 'models'
+    
+    echo "Model file is not existed. Downloading..."
+}
+
 main() {
     clone_repo
     install_requirements
@@ -29,3 +37,4 @@ main() {
 }
 
 main
+

@@ -11,6 +11,7 @@ class TestManager: ObservableObject {
     var total: Int
     @Published var current: Double
     
+    let PYTHON_PATH = "/Users/ly/colorized-python"
 //    var currentProgress: Float? = 0.5
 //    var totalProgress: Float? = 0.75
     
@@ -31,7 +32,10 @@ class TestManager: ObservableObject {
     }
     
     func increase() {
-            current += 10
+        current += 10
+        if current >= 100 {
+            current = 100
+        }
     }
     
     func runProcess() {
@@ -63,6 +67,46 @@ class TestManager: ObservableObject {
 //        print(output)
     }
     
+    private func runPythonScript() -> String {
+        
+        let runnerPath = PYTHON_PATH + "/" + "runner.py"
+        let command = "python3 " + runnerPath
+        
+        return command.runAsCommand()
+    }
+    
+    
+    func runTerminal() {
+        print("Activate env")
+        let envCommand = ". $HOME/colorized-python/venv/bin/activate"
+        let res = envCommand.runAsCommand()
+        debugPrint(res)
+        
+        let runnerPath = PYTHON_PATH + "/" + "runner.py"
+        let command = "python3 " + runnerPath
+        
+        print("Command: ")
+        print(command)
+        let task = Process()
+
+        task.launchPath = "/bin/sh"
+        task.arguments = ["-c", envCommand + " ; " + command]
+
+        let pipe = Pipe()
+        task.standardOutput = pipe
+        let outHandle = pipe.fileHandleForReading
+
+        outHandle.readabilityHandler = { pipe in
+            if let line = String(data: pipe.availableData, encoding: String.Encoding(rawValue: NSUTF8StringEncoding) ) {
+                // Update your view with the new text here
+                print("New ouput: \(line)")
+            } else {
+                print("Error decoding data: \(pipe.availableData)")
+            }
+        }
+
+        task.launch()
+    }
     
     
     private func createEnv() {

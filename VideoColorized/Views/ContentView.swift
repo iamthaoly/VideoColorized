@@ -16,7 +16,7 @@ public struct ContentView: View {
     
     @State private var files = [
         VideoFile(id: 1, name: "sample.mp4", path: "~/Desktop/My Videos/sample.mp4"),
-//        VideoFile(id: 2, name: "testing.mov", path: "~/Desktop/My Videos/testing.mp4"),
+        VideoFile(id: 2, name: "testing.mov", path: "~/Desktop/My Videos/testing.mp4"),
         //                VideoFile(id: 3, name: "testing.mov", path: "80"),
         //                VideoFile(id: 4, name: "testing.mov", path: "80"),
         //                VideoFile(id: 5, name: "testing.mov", path: "80"),
@@ -55,10 +55,13 @@ public struct ContentView: View {
 //                //                debugPrint("Intel MKL Error. DEBUG=0X005")
 //                //                fatalError("You click on the start button")
 //                testManager?.runProcess()
-//                isDisplayCompletedAlert = true
                 // Display popup
                 print("Increase current!")
                 testManager.increase()
+                if testManager.current >= 100.0 {
+                        isDisplayCompletedAlert = true
+                }
+                testManager.runTerminal()
             }) {
                 Text("START")
                     .font(.system(size: 13.0))
@@ -74,14 +77,15 @@ public struct ContentView: View {
             .frame(maxWidth: .infinity)
             .padding(.vertical, 10.0)
             .padding(.horizontal, 45.0)
-            .alert("Converting completed", isPresented: $isDisplayCompletedAlert) {
+            .alert(isPresented: $isDisplayCompletedAlert) {
                 if isSameAsSource {
                     // TODO: Open destination folder
 //                    Button("Open destination folder") {
 //
 //                    }
                 }
-                Button("OK") { }
+                return Alert(title: Text("Convert completed"), primaryButton: .default(Text("OK")), secondaryButton: .default(Text("Cancel")))
+//                Button("OK") { }
             }
             
             ConvertProgressView(current: self.$testManager.current)
@@ -129,15 +133,46 @@ struct InputVideo: View {
             VStack(alignment: .center, spacing: files.count > 1 ? 0 : 20) {
                 if files.count > 1 {
                     VStack {
-                        Table(files, selection: $selection) {
-                            TableColumn("Name", value: \.name)
+                        if #available(macOS 12.0, *) {
+                            Table(files, selection: $selection) {
+                                TableColumn("Name", value: \.name)
+                                
+                                //                TableColumn("") { file in
+                                //                    Text(String(file.path))
+                                //                }
+                            }
+                            //                .offset(y: -27)
+                            .opacity(0.85)
+                        } else {
+                            // Fallback on earlier versions
+                            List {
+                                HStack() {
+                                    VStack {
+                                        //Column 1 Data
+                                        Text("Name")
+                                            .foregroundColor(.primary)
+                                            .font(.headline)
+                                        Divider()
+                                        ForEach(files) { file in
+                                            //  Text(person.name) this is list ...
+                                            Text(file.path)
+                                        }
+                                    }
+                                    Divider()
+//                                    VStack {
+//                                        //Column 2 Data
+//                                        Text("Creation Date")
+//                                            .foregroundColor(.primary)
+//                                            .font(.headline)
+//                                        Divider()
+//                                        ForEach(data) { person in
+//                                            //  Text(person.name) this is list ...
+//                                        }
+//                                    }
+                                }
+                            }
                             
-                            //                TableColumn("") { file in
-                            //                    Text(String(file.path))
-                            //                }
                         }
-                        //                .offset(y: -27)
-                        .opacity(0.85)
                     }
                 }
                 else {
@@ -223,8 +258,14 @@ struct ConvertProgressView: View {
             VStack(alignment: .leading, spacing: 5) {
                 Text("Current progress")
                 HStack(alignment: .center, spacing: 10) {
-                    ProgressView(value: CGFloat(current), total: TOTAL)
-                        .tint(.green)
+                    if #available(macOS 12.0, *) {
+                        ProgressView(value: CGFloat(current), total: TOTAL)
+                            .tint(.green)
+                    } else {
+                        // Fallback on earlier versions
+                        ProgressView(value: CGFloat(current), total: TOTAL)
+                            .progressViewStyle(CircularProgressViewStyle(tint: Color.green))
+                    }
                     
                     Text(String(current) + "%")
                         .fontWeight(.bold)
@@ -240,8 +281,15 @@ struct ConvertProgressView: View {
                 Text("Total progress")
                     .fontWeight(.bold)
                 HStack(alignment: .center, spacing: 10) {
-                    ProgressView(value: CGFloat(TOTAL), total: TOTAL)
-                        .tint(.green)
+                    if #available(macOS 12.0, *) {
+                        ProgressView(value: CGFloat(TOTAL), total: TOTAL)
+                            .tint(.green)
+                    } else {
+                        // Fallback on earlier versions
+                        ProgressView(value: CGFloat(TOTAL), total: TOTAL)
+                            .progressViewStyle(CircularProgressViewStyle(tint: Color.green))
+
+                    }
 //                    Text("75%")
                     Text(String(TOTAL) + "%")
                         .fontWeight(.bold)
@@ -264,7 +312,7 @@ struct DestinationView: View {
     var body: some View {
         VStack(alignment: .leading) {
             ZStack(alignment: .topLeading) {
-                GroupBox("") {
+                GroupBox() {
                     VStack {
                         HStack() {
                             TextField("", text: $outputPath)
