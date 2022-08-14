@@ -51,15 +51,15 @@ public struct ContentView: View {
             //            .padding(.vertical, 10.0)
             //            .padding(.horizontal, 45.0)
             Button(action: {
-//                testManager = TestManager(total: 4, current: 0)
-//                //                debugPrint("Intel MKL Error. DEBUG=0X005")
-//                //                fatalError("You click on the start button")
-//                testManager?.runProcess()
+                //                testManager = TestManager(total: 4, current: 0)
+                //                //                debugPrint("Intel MKL Error. DEBUG=0X005")
+                //                //                fatalError("You click on the start button")
+                //                testManager?.runProcess()
                 // Display popup
                 print("Increase current!")
                 testManager.increase()
                 if testManager.current >= 100.0 {
-                        isDisplayCompletedAlert = true
+                    isDisplayCompletedAlert = true
                 }
                 testManager.runTerminal()
             }) {
@@ -80,15 +80,25 @@ public struct ContentView: View {
             .alert(isPresented: $isDisplayCompletedAlert) {
                 if isSameAsSource {
                     // TODO: Open destination folder
-//                    Button("Open destination folder") {
-//
-//                    }
+                    //                    Button("Open destination folder") {
+                    //
+                    //                    }
                 }
                 return Alert(title: Text("Convert completed"), primaryButton: .default(Text("OK")), secondaryButton: .default(Text("Cancel")))
-//                Button("OK") { }
+                //                Button("OK") { }
             }
             
             ConvertProgressView(current: self.$testManager.current)
+            ScrollView {
+                    Text(testManager.terminalString)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+               
+//                Text(testManager.terminalString)
+//                    .multilineTextAlignment(.leading)
+//                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .frame(maxWidth: .infinity)
             
         }
         .padding(.horizontal, 30)
@@ -134,15 +144,32 @@ struct InputVideo: View {
                 if files.count > 1 {
                     VStack {
                         if #available(macOS 12.0, *) {
-                            Table(files, selection: $selection) {
-                                TableColumn("Name", value: \.name)
-                                
-                                //                TableColumn("") { file in
-                                //                    Text(String(file.path))
-                                //                }
+//                            Table(files, selection: $selection) {
+//                                TableColumn("Name", value: \.name)
+//
+//                                //                TableColumn("") { file in
+//                                //                    Text(String(file.path))
+//                                //                }
+//                            }
+//                            //                .offset(y: -27)
+//                            .opacity(0.85)
+                            List {
+                                HStack() {
+                                    VStack(alignment: .leading) {
+                                        //Column 1 Data
+                                        Text("Name")
+                                            .foregroundColor(.primary)
+                                            .font(.headline)
+                                        Divider()
+                                        ForEach(files) { file in
+                                            //  Text(person.name) this is list ...
+                                            Text(file.path)
+                                        }
+                                    }
+                                    Divider()
+                                }
                             }
-                            //                .offset(y: -27)
-                            .opacity(0.85)
+
                         } else {
                             // Fallback on earlier versions
                             List {
@@ -159,18 +186,9 @@ struct InputVideo: View {
                                         }
                                     }
                                     Divider()
-//                                    VStack {
-//                                        //Column 2 Data
-//                                        Text("Creation Date")
-//                                            .foregroundColor(.primary)
-//                                            .font(.headline)
-//                                        Divider()
-//                                        ForEach(data) { person in
-//                                            //  Text(person.name) this is list ...
-//                                        }
-//                                    }
                                 }
                             }
+                            .frame(minHeight: 100)
                             
                         }
                     }

@@ -10,6 +10,7 @@ import Foundation
 class TestManager: ObservableObject {
     var total: Int
     @Published var current: Double
+    @Published var terminalString: String = ""
     
     let PYTHON_PATH = "/Users/ly/colorized-python"
 //    var currentProgress: Float? = 0.5
@@ -25,6 +26,12 @@ class TestManager: ObservableObject {
     private init(total: Int, current: Double) {
         self.total = total
         self.current = current
+    }
+    
+    private func updateString(_ text: String) {
+        DispatchQueue.main.async {
+            self.terminalString += text
+        }
     }
     
     func count() {
@@ -81,6 +88,7 @@ class TestManager: ObservableObject {
         let envCommand = ". $HOME/colorized-python/venv/bin/activate"
         let res = envCommand.runAsCommand()
         debugPrint(res)
+        updateString(res)
         
         let runnerPath = PYTHON_PATH + "/" + "runner.py"
         let command = "python3 " + runnerPath
@@ -88,6 +96,8 @@ class TestManager: ObservableObject {
         print("Command: ")
         print(command)
         let task = Process()
+        updateString("\n" + command)
+
 
         task.launchPath = "/bin/sh"
         task.arguments = ["-c", envCommand + " ; " + command]
@@ -99,36 +109,23 @@ class TestManager: ObservableObject {
         outHandle.readabilityHandler = { pipe in
             if let line = String(data: pipe.availableData, encoding: String.Encoding(rawValue: NSUTF8StringEncoding) ) {
                 // Update your view with the new text here
-                print("New ouput: \(line)")
+                if line != "" && line.count > 0 {
+                    print("New output: \(line)")
+                    self.updateString ("New output + \n")
+
+                    self.updateString ("\n" + line)
+                }
+
             } else {
                 print("Error decoding data: \(pipe.availableData)")
+                self.updateString ("Error decoding data: \n")
+                self.updateString ("\( pipe.availableData)")
             }
         }
 
         task.launch()
     }
     
-    
-    private func createEnv() {
-        //      Create virtualenv
-        let commands = [
-            "virtualenv -p python3 path",
-            "source .../bin/activate"
-        ]
-        
-        let pythonFolder = URL(fileURLWithPath: "PyOnMac", isDirectory: true, relativeTo: Bundle.main.resourceURL)
-        var env = pythonFolder
-        
-        if #available(macOS 13.0, *) {
-            env = pythonFolder.appending(path: "venv")
-        } else {
-            // Fallback on earlier versions
-            env = pythonFolder.appendingPathComponent("venv")
-        }
-        
-        
-        let virtualenv2 = "virtualenv -p python3 " + env.path
-    }
 }
 
 extension String {
