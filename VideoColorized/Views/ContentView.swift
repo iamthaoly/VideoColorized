@@ -143,20 +143,22 @@ struct InputVideo: View {
 //                            .opacity(0.85)
                             List {
                                 HStack() {
-                                    VStack(alignment: .leading) {
+                                    VStack(alignment: .leading, spacing: 5.0) {
                                         //Column 1 Data
                                         Text("Name")
+                                            .padding(.bottom, 2.0)
                                             .foregroundColor(.primary)
                                             .font(.headline)
                                         Divider()
+//                                        Divider()
                                         ForEach(files) { file in
                                             //  Text(person.name) this is list ...
                                             Text(file.path)
                                         }
                                     }
-                                    Divider()
                                 }
                             }
+                            .frame(minHeight: 100)
 
                         } else {
                             // Fallback on earlier versions
