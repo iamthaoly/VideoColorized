@@ -8,8 +8,37 @@
 import SwiftUI
 
 struct InstallerView: View {
+
+    @ObservedObject var testManager: TestManager
+
+    init() {
+        self.testManager = TestManager.shared
+    }
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack() {
+            Text("Installer setup")
+            
+            Button(action: {
+                print("Hello World")
+            }) {
+                Text("Start now")
+            }
+            
+//            VStack() {
+                ScrollView {
+                        Text("Haha \n\n\n\n Foolist boi.\n\n\n\n HOho")
+                            .multilineTextAlignment(.leading)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .background(Color.gray)
+                            .frame(minHeight: 300)
+//                            .frame(maxWidth: .infinity)
+                }
+//            }
+//            .frame(maxWidth: .infinity, minHeight: 300.0)
+            
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
