@@ -77,6 +77,87 @@ class TestManager: ObservableObject {
     }
     
     
+    func runBrewScript() {
+        
+        terminalString = ""
+        
+        let url = URL(fileURLWithPath: "brew_script.sh", relativeTo: Bundle.main.resourceURL)
+        
+        let command = "sh " + url.path
+        
+        print("Command: ")
+        print(command)
+        let task = Process()
+        updateString(command + "\n")
+
+
+        task.launchPath = "/bin/sh"
+        task.arguments = ["-c", command]
+//        task.arguments = ["-c", "echo 1 ; sleep 1 ; echo 2 ; sleep 1 ; echo 3 ; sleep 1 ; echo 4"]
+
+        let pipe = Pipe()
+        task.standardOutput = pipe
+        let outHandle = pipe.fileHandleForReading
+
+        outHandle.readabilityHandler = { pipe in
+            if let line = String(data: pipe.availableData, encoding: String.Encoding(rawValue: NSUTF8StringEncoding) ) {
+                // Update your view with the new text here
+                if line != "" && line.count > 0 {
+                    print("New output: \(line)")
+                    self.updateString(line)
+                }
+
+            } else {
+                print("Error decoding data: \(pipe.availableData)")
+                self.updateString ("Error decoding data: \n")
+                self.updateString ("\( pipe.availableData)")
+            }
+        }
+
+        task.launch()
+    }
+    
+    func runInitScript() {
+        
+        terminalString = ""
+        
+        let url = URL(fileURLWithPath: "init_script.sh", relativeTo: Bundle.main.resourceURL)
+        
+        let init_script = "sudo sh " + url.path
+        let command = "osascript do shell script \"\(init_script)\" with administrator privileges"
+        print("Command: ")
+        print(command)
+        let task = Process()
+        updateString(command + "\n")
+
+
+        task.launchPath = "/bin/sh"
+        task.arguments = ["-c", command]
+//        task.arguments = ["-c", "echo 1 ; sleep 1 ; echo 2 ; sleep 1 ; echo 3 ; sleep 1 ; echo 4"]
+
+        let pipe = Pipe()
+        task.standardOutput = pipe
+        let outHandle = pipe.fileHandleForReading
+
+        outHandle.readabilityHandler = { pipe in
+            if let line = String(data: pipe.availableData, encoding: String.Encoding(rawValue: NSUTF8StringEncoding) ) {
+                // Update your view with the new text here
+                if line != "" && line.count > 0 {
+                    print("New output: \(line)")
+                    self.updateString ("\n")
+                    self.updateString (line)
+                }
+
+            } else {
+                print("Error decoding data: \(pipe.availableData)")
+                self.updateString ("Error decoding data: \n")
+                self.updateString ("\( pipe.availableData)")
+            }
+        }
+
+        task.launch()
+    }
+    
     func runTerminal() {
         print("Activate env")
         let envCommand = ". $HOME/colorized-python/venv/bin/activate"
@@ -106,14 +187,14 @@ class TestManager: ObservableObject {
                 // Update your view with the new text here
                 if line != "" && line.count > 0 {
                     print("New output: \(line)")
-                    self.updateString ("New output \n")
-                    self.updateString (line)
+                    self.updateString("New output \n")
+                    self.updateString(line + "\n")
                 }
 
             } else {
                 print("Error decoding data: \(pipe.availableData)")
-                self.updateString ("Error decoding data: \n")
-                self.updateString ("\( pipe.availableData)")
+                self.updateString("Error decoding data: \n")
+                self.updateString("\( pipe.availableData)")
             }
         }
 

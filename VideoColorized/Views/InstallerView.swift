@@ -21,19 +21,22 @@ struct InstallerView: View {
             
             Button(action: {
                 print("Hello World")
+                testManager.runBrewScript()
             }) {
                 Text("Start now")
+               
             }
             
 //            VStack() {
                 ScrollView {
-                        Text("Haha \n\n\n\n Foolist boi.\n\n\n\n HOho")
+                        Text(testManager.terminalString)
                             .multilineTextAlignment(.leading)
                             .fixedSize(horizontal: false, vertical: true)
                             .background(Color.gray)
                             .frame(minHeight: 300)
-//                            .frame(maxWidth: .infinity)
+                            .frame(maxWidth: .infinity)
                 }
+                .frame(maxWidth: .infinity)
 //            }
 //            .frame(maxWidth: .infinity, minHeight: 300.0)
             
