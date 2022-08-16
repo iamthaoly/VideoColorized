@@ -12,6 +12,9 @@ class TestManager: ObservableObject {
     @Published var current: Double
     @Published var terminalString: String = ""
     
+    @Published var isBrewDone: Bool = false
+    @Published var isInitDone: Bool = false
+    
     let PYTHON_PATH = FileManager.default.homeDirectoryForCurrentUser.path + "/colorized-python"
 //    var currentProgress: Float? = 0.5
 //    var totalProgress: Float? = 0.75
@@ -32,10 +35,6 @@ class TestManager: ObservableObject {
         DispatchQueue.main.async {
             self.terminalString += text
         }
-    }
-    
-    func count() {
-        Timer()
     }
     
     func increase() {
@@ -95,16 +94,24 @@ class TestManager: ObservableObject {
         task.arguments = ["-c", command]
 //        task.arguments = ["-c", "echo 1 ; sleep 1 ; echo 2 ; sleep 1 ; echo 3 ; sleep 1 ; echo 4"]
 
-        let pipe = Pipe()
-        task.standardOutput = pipe
-        let outHandle = pipe.fileHandleForReading
+        let myPipe = Pipe()
+        task.standardOutput = myPipe
+        let outHandle = myPipe.fileHandleForReading
 
         outHandle.readabilityHandler = { pipe in
             if let line = String(data: pipe.availableData, encoding: String.Encoding(rawValue: NSUTF8StringEncoding) ) {
-                // Update your view with the new text here
-                if line != "" && line.count > 0 {
-                    print("New output: \(line)")
-                    self.updateString(line)
+                if pipe.availableData.isEmpty  {
+                    print("EOF: This command is done!")
+                    myPipe.fileHandleForReading.readabilityHandler = nil
+                    DispatchQueue.main.async {
+                        self.isBrewDone = true
+                    }
+                }
+                else {
+                    if line != "" && line.count > 0 {
+                        print("New output: \(line)")
+                        self.updateString(line)
+                    }
                 }
 
             } else {
@@ -135,17 +142,24 @@ class TestManager: ObservableObject {
         task.arguments = ["-c", command]
 //        task.arguments = ["-c", "echo 1 ; sleep 1 ; echo 2 ; sleep 1 ; echo 3 ; sleep 1 ; echo 4"]
 
-        let pipe = Pipe()
-        task.standardOutput = pipe
-        let outHandle = pipe.fileHandleForReading
+        let myPipe = Pipe()
+        task.standardOutput = myPipe
+        let outHandle = myPipe.fileHandleForReading
 
         outHandle.readabilityHandler = { pipe in
             if let line = String(data: pipe.availableData, encoding: String.Encoding(rawValue: NSUTF8StringEncoding) ) {
-                // Update your view with the new text here
-                if line != "" && line.count > 0 {
-                    print("New output: \(line)")
-                    self.updateString ("\n")
-                    self.updateString (line)
+                if pipe.availableData.isEmpty  {
+                    print("EOF: This command is done!")
+                    myPipe.fileHandleForReading.readabilityHandler = nil
+                    DispatchQueue.main.async {
+                        self.isInitDone = true
+                    }
+                }
+                else {
+                    if line != "" && line.count > 0 {
+                        print("New output: \(line)")
+                        self.updateString(line)
+                    }
                 }
 
             } else {

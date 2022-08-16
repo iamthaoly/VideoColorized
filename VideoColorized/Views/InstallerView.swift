@@ -9,7 +9,7 @@ import SwiftUI
 
 struct InstallerView: View {
     @State var isDisplayCompletedAlert = false
-
+    @State var moveToHomeScreen = false
     @ObservedObject var testManager: TestManager
 
     init() {
@@ -53,9 +53,11 @@ struct InstallerView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
             .background(Color.black)
-            .alert(isPresented: $isDisplayCompletedAlert) {
+            .alert(isPresented: $testManager.isBrewDone) {
                 return Alert(title: Text("Convert completed"), dismissButton: .default(Text("Okay"), action: {
-                    // Go to homescreen
+                    //TODO:  Go to homescreen
+                    moveToHomeScreen = true
+                    
                 }))
 //                                Button("OK") { }
             }
@@ -63,6 +65,8 @@ struct InstallerView: View {
         }
         .frame(maxWidth: .infinity, minHeight: 300.0, maxHeight: .infinity)
         .padding(.all, 10.0)
+//        .navigate(to: HomeScreen(), when: $moveToHomeScreen)
+
     }
 }
 
@@ -71,3 +75,4 @@ struct InstallerView_Previews: PreviewProvider {
         InstallerView()
     }
 }
+
