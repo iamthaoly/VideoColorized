@@ -42,24 +42,50 @@ struct InstallerView: View {
             VStack(alignment: .leading) {
                 ScrollView {
                     VStack(alignment: .leading) {
-                        Text(testManager.terminalString)
-                            .multilineTextAlignment(.leading)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .frame(minHeight: 240)
-                            .frame(maxWidth: .infinity)
-                            .foregroundColor(.gray)
+                        if #available(macOS 12.0, *) {
+                            Text(testManager.terminalString)
+                                .multilineTextAlignment(.leading)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .frame(minHeight: 240)
+                                .frame(maxWidth: .infinity)
+                                .foregroundColor(.gray)
+//                                .textSelection(.enabled)
+                                .contextMenu {
+                                    Button(action: {
+                                        NSPasteboard.general.clearContents()
+                                        NSPasteboard.general.setString(testManager.terminalString, forType: .string)
+                                        }) {
+                                            Text("Copy the log.")
+                                        }
+                                }
+                        } else {
+                            Text(testManager.terminalString)
+                                .multilineTextAlignment(.leading)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .frame(minHeight: 240)
+                                .frame(maxWidth: .infinity)
+                                .foregroundColor(.gray)
+                                .contextMenu {
+                                    Button(action: {
+                                        NSPasteboard.general.clearContents()
+                                        NSPasteboard.general.setString(testManager.terminalString, forType: .string)
+                                        }) {
+                                            Text("Copy!")
+                                        }
+                                }
+                        }
+
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
             .background(Color.black)
-            .alert(isPresented: $testManager.isBrewDone) {
-                return Alert(title: Text("Convert completed"), dismissButton: .default(Text("Okay"), action: {
+            .alert(isPresented: $testManager.isInitDone) {
+                return Alert(title: Text("Convert completed"), dismissButton: .default(Text("OK"), action: {
                     //TODO:  Go to homescreen
                     moveToHomeScreen = true
                     
                 }))
-//                                Button("OK") { }
             }
             
         }

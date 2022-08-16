@@ -1,6 +1,5 @@
 clone_repo() {
     echo "----------------------"
-
     echo "Clone the repo..."
     cd $HOME
     git clone https://github.com/iamthaoly/colorized-python.git
@@ -13,7 +12,7 @@ activate() {
 install_requirements() {
     echo "----------------------"
     echo "Install the requirements..."
-    cd colorized-python
+    cd $HOME/colorized-python
     
     echo "Create a virtual environment"
     python3 -m venv venv

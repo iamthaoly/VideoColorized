@@ -44,6 +44,11 @@ class TestManager: ObservableObject {
         }
     }
     
+    private func setupProject() {
+        runBrewScript()
+        runInitScript()
+    }
+    
     func runProcess() {
 //        let executableURL = URL(fileURLWithPath: "/usr/bin/say")
 ////           self.isRunning = true
@@ -79,9 +84,7 @@ class TestManager: ObservableObject {
     func runBrewScript() {
         
         terminalString = ""
-        
         let url = URL(fileURLWithPath: "brew_script.sh", relativeTo: Bundle.main.resourceURL)
-        
         let command = "sh " + url.path
         
         print("Command: ")
@@ -106,6 +109,7 @@ class TestManager: ObservableObject {
                     DispatchQueue.main.async {
                         self.isBrewDone = true
                     }
+                    self.runInitScript()
                 }
                 else {
                     if line != "" && line.count > 0 {
@@ -126,12 +130,14 @@ class TestManager: ObservableObject {
     
     func runInitScript() {
         
-        terminalString = ""
+//        DispatchQueue.main.async {
+//            self.terminalString = ""
+//        }
         
         let url = URL(fileURLWithPath: "init_script.sh", relativeTo: Bundle.main.resourceURL)
         
         let init_script = "sudo sh " + url.path
-        let command = "osascript do shell script \"\(init_script)\" with administrator privileges"
+        let command = "osascript -e 'do shell script \"\(init_script)\" with administrator privileges'"
         print("Command: ")
         print(command)
         let task = Process()
