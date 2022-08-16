@@ -16,24 +16,24 @@ struct InstallerView: View {
         self.testManager = TestManager.shared
         testManager.terminalString =
         """
-            1.Python Python Python Python Python Python Python Python Python Python Python Python Python Python Python Python Python Python Python
-            2.Terminal
-            3.FFMPEG
-            4.Virtualenv
+        The app needs to download and install some packages.
+        Please click on "Start Now" button to start the installation progress.
+        \n
+        Note: The installation progress will take about 30 minutes to 2 hours. Please have some tea and come back later. :)\n
+        -The developer-
         """
     }
     
     var body: some View {
         VStack() {
-            Text("Installer setup")
+            Text("Installer Setup")
                 .foregroundColor(.primary)
                 .font(.title3)
-            Text("We need to ")
+                .padding(.bottom, 15.0)
             Button(action: {
-                print("Hello World")
                 testManager.runBrewScript()
             }) {
-                Text("Start now")
+                Text("Start Now")
             }
             
             Text("Installer log")
@@ -46,6 +46,7 @@ struct InstallerView: View {
                             Text(testManager.terminalString)
                                 .multilineTextAlignment(.leading)
                                 .fixedSize(horizontal: false, vertical: true)
+                                .padding()
                                 .frame(minHeight: 240)
                                 .frame(maxWidth: .infinity)
                                 .foregroundColor(.gray)
@@ -70,7 +71,7 @@ struct InstallerView: View {
                                         NSPasteboard.general.clearContents()
                                         NSPasteboard.general.setString(testManager.terminalString, forType: .string)
                                         }) {
-                                            Text("Copy!")
+                                            Text("Copy the log")
                                         }
                                 }
                         }

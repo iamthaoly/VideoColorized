@@ -133,7 +133,9 @@ class TestManager: ObservableObject {
 //        DispatchQueue.main.async {
 //            self.terminalString = ""
 //        }
-        
+        updateString("Cloning the repo...\n")
+        updateString("Done.\n")
+        updateString("Installing the requirements...\n")
         let url = URL(fileURLWithPath: "init_script.sh", relativeTo: Bundle.main.resourceURL)
         
         let init_script = "sudo sh " + url.path
