@@ -9,10 +9,9 @@ import SwiftUI
 
 @main
 struct VideoColorizedApp: App {
-    var goHome = false
     var body: some Scene {
         WindowGroup {
-            if (goHome) {
+            if (Utils.hasCompleteInstaller()) {
                 HomeScreen()
                     .navigationTitle("Homescreen")
             }
@@ -22,6 +21,19 @@ struct VideoColorizedApp: App {
             }
             
         }
+//        WindowGroup("InstallerWindow") {
+//            InstallerScreen()
+//        }.handlesExternalEvents(matching: Set(arrayLiteral: "InstallerWindow"))
             
     }
 }
+
+//enum OpenWindows: String, CaseIterable {
+//    case InstallerWindow = "InstallerWindow"
+//
+//    func open(){
+//        if let url = URL(string: "myapp://\(self.rawValue)") { //replace myapp with your app's name
+//            NSWorkspace.shared.open(url)
+//        }
+//    }
+//}

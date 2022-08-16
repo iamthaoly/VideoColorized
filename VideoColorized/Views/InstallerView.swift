@@ -9,7 +9,7 @@ import SwiftUI
 
 struct InstallerView: View {
     @State var isDisplayCompletedAlert = false
-    @State var moveToHomeScreen = false
+    @State var moveToHomeScreen = true
     @ObservedObject var testManager: TestManager
 
     init() {
@@ -55,7 +55,7 @@ struct InstallerView: View {
                                     NSPasteboard.general.clearContents()
                                     NSPasteboard.general.setString(testManager.terminalString, forType: .string)
                                     }) {
-                                        Text("Copy the log.")
+                                        Text("Copy")
                                     }
                             }
                             .id("log")
@@ -64,18 +64,17 @@ struct InstallerView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
             .background(Color.black)
-            .alert(isPresented: $testManager.isInitDone) {
-                return Alert(title: Text("Convert completed"), dismissButton: .default(Text("OK"), action: {
+            .alert(isPresented: $moveToHomeScreen) {
+                return Alert(title: Text("The installation progress is completed"), dismissButton: .default(Text("OK"), action: {
                     //TODO:  Go to homescreen
-                    moveToHomeScreen = true
-                    
+//                    moveToHomeScreen = true
+//                    OpenWindows.InstallerWindow.open()
                 }))
             }
             
         }
         .frame(maxWidth: .infinity, minHeight: 300.0, maxHeight: .infinity)
         .padding(.all, 10.0)
-//        .navigate(to: HomeScreen(), when: $moveToHomeScreen)
 
     }
 }
