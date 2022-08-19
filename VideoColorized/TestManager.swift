@@ -6,6 +6,7 @@
 //
 
 import Foundation
+//import Darwin
 
 class TestManager: ObservableObject {
     var total: Int
@@ -14,6 +15,9 @@ class TestManager: ObservableObject {
     
     @Published var isBrewDone: Bool = false
     @Published var isInitDone: Bool = false
+    
+    @Published var videoFiles: [String] = []
+    @Published var currentVideoIndex: Int?
     
     let PYTHON_PATH = FileManager.default.homeDirectoryForCurrentUser.path + "/colorized-python"
 //    var currentProgress: Float? = 0.5
@@ -35,6 +39,12 @@ class TestManager: ObservableObject {
         DispatchQueue.main.async {
             self.terminalString += text
         }
+    }
+    
+    func calcTotalProgress() -> Double {
+        let res = currentVideoIndex == nil ? 0.0 : 100.0 / Double(videoFiles.count) * Double(currentVideoIndex! + 1)
+        
+        return res
     }
     
     func increase() {
@@ -82,7 +92,7 @@ class TestManager: ObservableObject {
     
     
     func runBrewScript() {
-        
+//        setbuf(stdout, nil)
         terminalString = ""
         let url = URL(fileURLWithPath: "brew_script.sh", relativeTo: Bundle.main.resourceURL)
         let command = "sh " + url.path
@@ -100,12 +110,45 @@ class TestManager: ObservableObject {
         let myPipe = Pipe()
         task.standardOutput = myPipe
         let outHandle = myPipe.fileHandleForReading
-
+        
+        let errPipe = Pipe()
+        task.standardError = errPipe
+        let errHandle = errPipe.fileHandleForReading
+        
+//        task.terminationHandler =
+//            {
+////                (process) in
+////                fin = not(process.isRunning)
+//            }
+        
         outHandle.readabilityHandler = { pipe in
             if let line = String(data: pipe.availableData, encoding: String.Encoding(rawValue: NSUTF8StringEncoding) ) {
                 if pipe.availableData.isEmpty  {
-                    print("EOF: This command is done!")
+                    print("EOF stdout: This command is done!")
                     myPipe.fileHandleForReading.readabilityHandler = nil
+                    DispatchQueue.main.async {
+//                        self.isBrewDone = true
+                    }
+//                    self.runInitScript()
+                }
+                else {
+                    if line != "" && line.count > 0 {
+                        print("New output stdout: \(line)")
+                        self.updateString(line)
+                    }
+                }
+
+            } else {
+                print("Error decoding data: \(pipe.availableData)")
+                self.updateString ("Error decoding data: \n")
+                self.updateString ("\( pipe.availableData)")
+            }
+        }
+        errHandle.readabilityHandler = { pipe in
+            if let line = String(data: pipe.availableData, encoding: String.Encoding(rawValue: NSUTF8StringEncoding) ) {
+                if pipe.availableData.isEmpty  {
+                    print("EOF stderr: This command is done!")
+                    errPipe.fileHandleForReading.readabilityHandler = nil
                     DispatchQueue.main.async {
                         self.isBrewDone = true
                     }
@@ -113,7 +156,7 @@ class TestManager: ObservableObject {
                 }
                 else {
                     if line != "" && line.count > 0 {
-                        print("New output: \(line)")
+                        print("New output stderr: \(line)")
                         self.updateString(line)
                     }
                 }
@@ -126,6 +169,7 @@ class TestManager: ObservableObject {
         }
 
         task.launch()
+        task.waitUntilExit()
     }
     
     func runInitScript() {
@@ -154,13 +198,18 @@ class TestManager: ObservableObject {
         task.standardOutput = myPipe
         let outHandle = myPipe.fileHandleForReading
 
+        
+        let errPipe = Pipe()
+        task.standardError = errPipe
+        let errHandle = errPipe.fileHandleForReading
+        
         outHandle.readabilityHandler = { pipe in
             if let line = String(data: pipe.availableData, encoding: String.Encoding(rawValue: NSUTF8StringEncoding) ) {
                 if pipe.availableData.isEmpty  {
-                    print("EOF: This command is done!")
+                    print("EOF stdout: This command is done!")
                     myPipe.fileHandleForReading.readabilityHandler = nil
                     DispatchQueue.main.async {
-                        self.isInitDone = true
+//                        self.isInitDone = true
                     }
                 }
                 else {
@@ -177,7 +226,31 @@ class TestManager: ObservableObject {
             }
         }
 
+        errHandle.readabilityHandler = { pipe in
+            if let line = String(data: pipe.availableData, encoding: String.Encoding(rawValue: NSUTF8StringEncoding) ) {
+                if pipe.availableData.isEmpty  {
+                    print("EOF stderr: This command is done!")
+                    errPipe.fileHandleForReading.readabilityHandler = nil
+                    DispatchQueue.main.async {
+                        self.isInitDone = true
+                    }
+                }
+                else {
+                    if line != "" && line.count > 0 {
+                        print("New output stderr: \(line)")
+                        self.updateString(line)
+                    }
+                }
+
+            } else {
+                print("Error decoding data: \(pipe.availableData)")
+                self.updateString ("Error decoding data: \n")
+                self.updateString ("\( pipe.availableData)")
+            }
+        }
+
         task.launch()
+        task.waitUntilExit()
     }
     
     func runTerminal() {

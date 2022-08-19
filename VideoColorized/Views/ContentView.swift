@@ -285,15 +285,15 @@ struct ConvertProgressView: View {
                     .fontWeight(.bold)
                 HStack(alignment: .center, spacing: 10) {
                     if #available(macOS 12.0, *) {
-                        ProgressView(value: CGFloat(TOTAL), total: TOTAL)
+                        ProgressView(value: TestManager.shared.calcTotalProgress(), total: TOTAL)
                             .tint(.green)
                     } else {
                         // Fallback on earlier versions
-                        ProgressView(value: CGFloat(TOTAL), total: TOTAL)
+                        ProgressView(value: TestManager.shared.calcTotalProgress(), total: TOTAL)
                             .progressViewStyle(LinearProgressViewStyle(tint: Color.green))
                     }
 //                    Text("75%")
-                    Text(String(TOTAL) + "%")
+                    Text("\(TestManager.shared.calcTotalProgress()) %")
                         .fontWeight(.bold)
                 }
                 .frame(maxWidth: .infinity)

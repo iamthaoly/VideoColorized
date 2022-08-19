@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftUIWindow
 
 struct InstallerView: View {
     @State var isDisplayCompletedAlert = false
@@ -46,7 +47,7 @@ struct InstallerView: View {
                             .multilineTextAlignment(.leading)
                             .fixedSize(horizontal: false, vertical: true)
                             .padding()
-                            .frame(minHeight: 240)
+                            .frame(minHeight: 200)
                             .frame(maxWidth: .infinity)
                             .foregroundColor(.gray)
 //                                .textSelection(.enabled)
@@ -64,16 +65,18 @@ struct InstallerView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
             .background(Color.black)
-            .alert(isPresented: $moveToHomeScreen) {
-                return Alert(title: Text("The installation progress is completed"), dismissButton: .default(Text("OK"), action: {
-                    //TODO:  Go to homescreen
-//                    moveToHomeScreen = true
-//                    OpenWindows.InstallerWindow.open()
+            .alert(isPresented: $testManager.isInitDone) {
+//                return Alert(title: Text("The installation progress is completed"), dismissButton: .default(Text("OK"), action: {
+//
+//                }))
+            return Alert(title: Text("ERROR"), message: Text("EXEC_BAD_INSTRUCTIONS: INTEL_MKL_TYPE is not specified."), dismissButton: .default(Text("OK"), action: {
+                    
                 }))
+
             }
             
         }
-        .frame(maxWidth: .infinity, minHeight: 300.0, maxHeight: .infinity)
+        .frame(minWidth: 200.0, maxWidth: .infinity, minHeight: 250.0, maxHeight: .infinity)
         .padding(.all, 10.0)
 
     }
