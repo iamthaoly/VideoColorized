@@ -1,7 +1,10 @@
+ECHO=/bin/echo
+
 clone_repo() {
-    echo "----------------------"
-    echo "Clone the repo..."
+    $ECHO "----------------------"
+    $ECHO "Clone the repo..."
     cd $HOME
+    sudo rm -rf colorized-python
     git clone https://github.com/iamthaoly/colorized-python.git
 }
 
@@ -10,11 +13,11 @@ activate() {
 }
 
 install_requirements() {
-    echo "----------------------"
-    echo "Install the requirements..."
+    $ECHO "----------------------"
+    $ECHO "Install the requirements..."
     cd $HOME/colorized-python
     
-    echo "Create a virtual environment"
+    $ECHO "Create a virtual environment"
     python3 -m venv venv
     activate
     pip3 install -r requirements.txt
@@ -22,12 +25,20 @@ install_requirements() {
 }
 
 download_models() {
-    echo "Current dir"
+    cd $HOME/colorized-python/
+    $ECHO "Current dir"
     pwd
-#    mkdir -p 'models'
-#
-#    echo "Model file is not existed. Downloading..."
+    mkdir -p 'models'
+    if [ -e "models/ColorizeVideo_gen.pth" ]
+    then
+        $ECHO "Model file existed."
+    else
+        $ECHO "Model file is not existed. Downloading..."
+        curl https://data.deepai.org/deoldify/ColorizeVideo_gen.pth -o models/ColorizeVideo_gen.pth
+    fi
 }
+
+
 
 runConvert() {
     cd $HOME/colorized-python
@@ -37,7 +48,16 @@ runConvert() {
 main() {
     clone_repo
     install_requirements
-    echo "Install completed!"
+    download_models
+    $ECHO "Install completed!"
 }
 
-main
+($ECHO "I am a script! 123">&2)2>&1
+#    osascript -e 'do shell script "(echo a>&2)2>&1"'
+main 2>&1
+
+($ECHO "I am a script! 321">&2)2>&1
+($ECHO "I am a script! 000">&2)2>&1
+
+#echo "I am a script! 000"
+
