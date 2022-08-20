@@ -41,6 +41,20 @@ class TestManager: ObservableObject {
         }
     }
     
+    
+    private func runPythonScript() -> String {
+        let runnerPath = PYTHON_PATH + "/" + "runner.py"
+        let command = "python3 " + runnerPath
+        
+        return command.runAsCommand()
+    }
+    
+    private func clearResult() {
+        DispatchQueue.main.async {
+            self.terminalString = ""
+        }
+    }
+    
     func calcTotalProgress() -> Double {
         let res = currentVideoIndex == nil ? 0.0 : 100.0 / Double(videoFiles.count) * Double(currentVideoIndex! + 1)
         
@@ -52,11 +66,6 @@ class TestManager: ObservableObject {
         if current >= 100 {
             current = 100
         }
-    }
-    
-    private func setupProject() {
-        runBrewScript()
-        runInitScript()
     }
     
     func runProcess() {
@@ -82,14 +91,77 @@ class TestManager: ObservableObject {
         print(output)
 
     }
+
     
-    private func runPythonScript() -> String {
-        let runnerPath = PYTHON_PATH + "/" + "runner.py"
-        let command = "python3 " + runnerPath
+    // MARK: PUBLIC
+    func colorizeVideos(sameAsSource: Bool = true, renderFactor: Int = 21) {
+        clearResult()
+        // source
+        print("Activate env")
+        let envCommand = ". $HOME/colorized-python/venv/bin/activate"
         
-        return command.runAsCommand()
+        let strInput = ""
+        let strOutput = ""
+        let pythonCommand = "python3 runner.py -i \(strInput) -o \(strOutput) -r \(renderFactor)"
+        
+        
+        let task = Process()
+        task.launchPath = "/bin/sh"
+        task.arguments = ["-c", envCommand + "; " + pythonCommand]
+        
+        let myPipe = Pipe()
+        task.standardOutput = myPipe
+        let outHandle = myPipe.fileHandleForReading
+        
+        let errPipe = Pipe()
+        task.standardError = errPipe
+        let errHandle = errPipe.fileHandleForReading
+        
+        outHandle.readabilityHandler = { pipe in
+            if let line = String(data: pipe.availableData, encoding: String.Encoding(rawValue: NSUTF8StringEncoding) ) {
+                if pipe.availableData.isEmpty  {
+                    print("EOF stdout: This command is done!")
+                    myPipe.fileHandleForReading.readabilityHandler = nil
+                    DispatchQueue.main.async {
+//                        Update result
+                    }
+                }
+                else {
+                    if line != "" && line.count > 0 {
+                        print("New output stdout: \(line)")
+                        // Update progress
+                        if line.contains("%") {
+                            
+                        }
+//                        self.updateString(line)
+                    }
+                }
+
+            }
+        }
+        
+        errHandle.readabilityHandler = { pipe in
+            if let line = String(data: pipe.availableData, encoding: String.Encoding(rawValue: NSUTF8StringEncoding) ) {
+                if pipe.availableData.isEmpty  {
+                    print("EOF stderr: This command is done!")
+                    errPipe.fileHandleForReading.readabilityHandler = nil
+                    DispatchQueue.main.async {
+                        // Update result
+                    }
+                }
+                else {
+                    if line != "" && line.count > 0 {
+                        print("New output stderr: \(line)")
+//                        self.updateString(line)
+                    }
+                }
+
+            }
+        }
+
+        task.launch()
+        task.waitUntilExit()
     }
-    
     
     func runBrewScript() {
 //        setbuf(stdout, nil)
@@ -99,10 +171,9 @@ class TestManager: ObservableObject {
         
         print("Command: ")
         print(command)
-        let task = Process()
         updateString(command + "\n")
 
-
+        let task = Process()
         task.launchPath = "/bin/sh"
         task.arguments = ["-c", command]
 //        task.arguments = ["-c", "echo 1 ; sleep 1 ; echo 2 ; sleep 1 ; echo 3 ; sleep 1 ; echo 4"]
@@ -183,7 +254,11 @@ class TestManager: ObservableObject {
         let url = URL(fileURLWithPath: "init_script.sh", relativeTo: Bundle.main.resourceURL)
         
         let init_script = "sudo sh " + url.path
-        let command = "osascript -e 'do shell script \"\(init_script)\" with administrator privileges'"
+        let command = "osascript -e 'set res to do shell script \"\(init_script)\" with administrator privileges'"
+        
+//        osascript -e 'do shell script "sudo sh /Users/ly/Library/Developer/Xcode/DerivedData/VideoColorized-fasmgghulfsoipaubgggctofklhx/Build/Products/Debug/VideoColorized.app/Contents/Resources/init_script.sh" with administrator privileges'
+    //        osascript -e 'do shell script "(echo a>&2)2>&1"'
+
         print("Command: ")
         print(command)
         let task = Process()
