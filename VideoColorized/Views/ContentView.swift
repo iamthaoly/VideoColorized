@@ -13,6 +13,8 @@ public struct ContentView: View {
     @ObservedObject var testManager: TestManager
     
     @State private var isSameAsSource = false
+    @State var outputPath: String = UserDefaults.standard.string(forKey: "outputPath") ?? ""
+    @State var renderFactor: Int = 21
     
     init() {
         self.testManager = TestManager.shared
@@ -21,8 +23,8 @@ public struct ContentView: View {
     public var body: some View {
         VStack(alignment: .center, spacing: 20) {
             InputVideo()
-            DestinationView(isSameAsSource: $isSameAsSource)
-            RenderSettingView()
+            DestinationView(isSameAsSource: $isSameAsSource, outputPath: $outputPath)
+            RenderSettingView(renderFactor: $renderFactor)
             //            VStack(alignment: .center) {
             //                Button(action: { print()}) {
             //                    Text("STOP")
@@ -51,7 +53,7 @@ public struct ContentView: View {
 //                }
 //                testManager.runTerminal()
                 testManager.isRunning = !testManager.isRunning
-                testManager.colorizeVideos(sameAsSource: isSameAsSource, outputPath: "", renderFactor: 21)
+                testManager.colorizeVideos(sameAsSource: isSameAsSource, outputPath: outputPath, renderFactor: renderFactor)
             }) {
                 Text(testManager.isRunning ? "STOP" : "START")
                     .font(.system(size: 13.0))
@@ -207,17 +209,17 @@ struct InputVideo: View {
 }
 
 struct RenderSettingView: View {
-    @State private var sleepAmount = 21
+    @Binding var renderFactor: Int
     
     var body: some View {
         HStack(spacing: 5) {
             Text("Render factor")
                 .font(.body)
                 .fontWeight(.regular)
-            TextField("", value: $sleepAmount, formatter: NumberFormatter())
+            TextField("", value: $renderFactor, formatter: NumberFormatter())
                 .frame(width: 28.0)
                 .opacity(0.73)
-            Stepper("", value: $sleepAmount, in: 10...40)
+            Stepper("", value: $renderFactor, in: 10...40)
             
         }
         .padding(.horizontal, 9)
@@ -285,7 +287,7 @@ struct ConvertProgressView: View {
 
 struct DestinationView: View {
     @Binding var isSameAsSource: Bool
-    @State private var outputPath: String = UserDefaults.standard.string(forKey: "outputPath") ?? ""
+    @Binding var outputPath: String
     
     var body: some View {
         VStack(alignment: .leading) {

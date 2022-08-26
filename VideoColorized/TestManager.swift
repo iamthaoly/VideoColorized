@@ -52,6 +52,18 @@ class TestManager: ObservableObject {
         }
     }
     
+    private func getInputPathArr() -> [String] {
+        var res: [String] = []
+        
+        for videoFile in videoFiles {
+            res.append(videoFile.path)
+        }
+        
+        return res
+    }
+    
+     
+    
     // MARK: - PUBLIC
     func calcTotalProgress() -> Double {
         let res = currentVideoIndex == nil ? 0.0 : 100.0 / Double(videoFiles.count) * Double(currentVideoIndex! + 1)
@@ -76,6 +88,16 @@ class TestManager: ObservableObject {
             print(finalURL)
             outputs.append(finalURL.path)
         }
+        
+        let strInputs = getInputPathArr().joined(separator: ";")
+        let strOutputs = outputs.joined(separator: ";")
+        
+        print(strInputs)
+        print(strOutputs)
+        
+        let command = "python3 -i \"\(strInputs)\" -o \"\(strOutputs)\" -r \(renderFactor)"
+        print("Convert command:")
+        print(command)
         
     }
     
