@@ -309,7 +309,7 @@ struct ConvertProgressView: View {
 
 struct DestinationView: View {
     @Binding var isSameAsSource: Bool
-    @State private var outputPath: String = "~/Desktop/"
+    @State private var outputPath: String = UserDefaults.standard.string(forKey: "outputPath") ?? ""
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -320,12 +320,36 @@ struct DestinationView: View {
                             TextField("", text: $outputPath)
                             //                                .opacity(0.85)
                                 .disabled(true)
-                            Button("Browse") {
-                                
+                            Button(action: {
+                                let dialog = NSOpenPanel()
+                                dialog.title = "Choose a folder"
+                                dialog.showsResizeIndicator = true
+                                dialog.showsHiddenFiles = false
+                                dialog.canChooseDirectories = true
+                                dialog.canCreateDirectories = true
+                                dialog.canChooseFiles = false
+                                dialog.allowsMultipleSelection = false
+
+                                if dialog.runModal() == NSApplication.ModalResponse.OK {
+                                    let result = dialog.url // Pathname of the file
+                                    if result != nil {
+                                        outputPath = result!.path
+                                        UserDefaults.standard.set(outputPath, forKey: "outputPath")
+                                    }
+                                } else {
+                                    // User clicked on "Cancel"
+                                    return
+                                }
+                            }) {
+                                Text("Browse")
                             }
-                            Button("Open") {
-                                
+                            Button(action: {
+                                print("Open output path")
+                                NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: outputPath)
+                            }) {
+                                Text("Open")
                             }
+
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.all, 10.0)
