@@ -14,25 +14,13 @@ public struct ContentView: View {
     
     @State private var isSameAsSource = false
     
-    @State private var files = [
-        VideoFile(id: 1, name: "sample.mp4", path: "~/Desktop/My Videos/sample.mp4"),
-        VideoFile(id: 2, name: "testing.mov", path: "~/Desktop/My Videos/testing.mp4"),
-        //                VideoFile(id: 3, name: "testing.mov", path: "80"),
-        //                VideoFile(id: 4, name: "testing.mov", path: "80"),
-        //                VideoFile(id: 5, name: "testing.mov", path: "80"),
-        //                VideoFile(id: 6, name: "testing.mov", path: "80"),
-        //                VideoFile(id: 7, name: "testing.mov", path: "80"),
-        //                VideoFile(id: 8, name: "testing.mov", path: "80"),
-        //                VideoFile(id: 9, name: "Adele Adkins", path: "85")
-    ]
-    
     init() {
         self.testManager = TestManager.shared
     }
     
     public var body: some View {
         VStack(alignment: .center, spacing: 20) {
-            InputVideo(files: $files)
+            InputVideo()
             DestinationView(isSameAsSource: $isSameAsSource)
             RenderSettingView()
             //            VStack(alignment: .center) {
@@ -63,6 +51,7 @@ public struct ContentView: View {
 //                }
 //                testManager.runTerminal()
                 testManager.isRunning = !testManager.isRunning
+                testManager.colorizeVideos(sameAsSource: isSameAsSource, outputPath: "", renderFactor: 21)
             }) {
                 Text(testManager.isRunning ? "STOP" : "START")
                     .font(.system(size: 13.0))
@@ -105,10 +94,10 @@ public struct ContentView: View {
 
 struct InputVideo: View {
     
-    @Binding var files: [VideoFile]
+//    @Binding var files: [VideoFile]
     
     func isVideoExist(pathToCheck: String) -> Bool {
-        for item in files {
+        for item in manager.videoFiles {
             if pathToCheck == item.path {
                 return true
             }
@@ -120,6 +109,7 @@ struct InputVideo: View {
     @State private var dragOver = false
     
     let allowVideoExtensions = ["mp4", "mov"]
+    @StateObject var manager = TestManager.shared
     
     var body: some View {
         VStack(alignment: .trailing, spacing: 5) {
@@ -128,11 +118,11 @@ struct InputVideo: View {
                 .fontWeight(.bold)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
-            VStack(alignment: .center, spacing: files.count > 1 ? 0 : 20) {
-                if files.count > 1 {
+            VStack(alignment: .center, spacing: manager.videoFiles.count > 1 ? 0 : 20) {
+                if manager.videoFiles.count > 1 {
                     VStack {
                         if #available(macOS 12.0, *) {
-                            Table(files, selection: $selection) {
+                            Table(manager.videoFiles, selection: $selection) {
                                 TableColumn("Name", value: \.name)
                                 
                                 //                TableColumn("") { file in
@@ -156,7 +146,7 @@ struct InputVideo: View {
                                             .font(.headline)
                                         Divider()
                                         //                                        Divider()
-                                        ForEach(files) { file in
+                                        ForEach(manager.videoFiles) { file in
                                             //  Text(person.name) this is list ...
                                             Text(file.path)
                                         }
@@ -178,7 +168,7 @@ struct InputVideo: View {
                         .foregroundColor(Color(red: 0, green: 0, blue: 0, opacity: 0.35))
                 }
             }
-            .padding(.all, files.count > 1 ? 0 : 20)
+            .padding(.all, manager.videoFiles.count > 1 ? 0 : 20)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .cornerRadius(10)
             .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color(red: 0.29, green: 0.57, blue: 0.97), lineWidth: 1))
@@ -187,12 +177,13 @@ struct InputVideo: View {
                     provider.loadDataRepresentation(forTypeIdentifier: "public.file-url", completionHandler: { (data, error) in
                         if let data = data, let path = NSString(data: data, encoding: 4), let url = URL(string: path as String) {
                             if (allowVideoExtensions.contains(url.pathExtension) && isVideoExist(pathToCheck: url.path) == false) {
-                                
-                                let newVideo = VideoFile(id: files.count, name: url.lastPathComponent, path: url.path)
-                                
-                                files.append(newVideo)
-                                print("NEW PATH::")
-                                debugPrint(url)
+                    
+                                DispatchQueue.main.async {
+                                    let newVideo = VideoFile(path: url.path)
+                                    manager.videoFiles.append(newVideo)
+                                    print("NEW PATH::")
+                                    debugPrint(url)
+                                }
                             }
                             else {
                                 print("This file type is not supported.")
@@ -206,7 +197,7 @@ struct InputVideo: View {
             }
             
             Button("Clear all") {
-                files.removeAll()
+                manager.videoFiles.removeAll()
             }
             
         }

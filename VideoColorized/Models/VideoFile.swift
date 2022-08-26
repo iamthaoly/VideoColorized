@@ -8,7 +8,14 @@
 import Foundation
 
 struct VideoFile: Identifiable {
-    let id: Int
-    let name: String
-    let path: String
+    var id = UUID()
+    var name: String
+    var path: String
+    var url: URL
+    
+    init(path: String) {
+        self.path = path
+        self.url = URL.init(fileURLWithPath: path)
+        self.name = url.lastPathComponent
+    }
 }

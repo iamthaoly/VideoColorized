@@ -16,8 +16,10 @@ struct VideoColorizedApp: App {
                     .navigationTitle("Homescreen")
             }
             else {
-                InstallerScreen()
-                    .navigationTitle("Installer")
+                HomeScreen()
+                    .navigationTitle("Homescreen")
+//                InstallerScreen()
+//                    .navigationTitle("Installer")
             }
             
         }

@@ -16,7 +16,10 @@ class TestManager: ObservableObject {
     @Published var isBrewDone: Bool = false
     @Published var isInitDone: Bool = false
     
-    @Published var videoFiles: [String] = []
+    @Published var videoFiles: [VideoFile] = [
+        VideoFile(path: "~/Desktop/My Videos/sample.mp4"),
+        VideoFile(path: "~/Desktop/My Videos/testing.mp4")
+    ]
     @Published var currentVideoIndex: Int?
     
     @Published var isRunning: Bool = false
@@ -55,73 +58,25 @@ class TestManager: ObservableObject {
         return res
     }
 
-    func colorizeVideos(sameAsSource: Bool = true, renderFactor: Int = 21) {
+    func colorizeVideos(sameAsSource: Bool = true, outputPath: String = "", renderFactor: Int = 21)  {
         clearResult()
-        // source result
-        print("Activate env")
-        let envCommand = ". $HOME/colorized-python/venv/bin/activate"
-        let strInput = "$HOME/colorized-python/input3_color_10fps.mp4"
-        let strOutput = "$HOME/Desktop/sample_output.mp4"
+        var outputs: [String] = []
         
-        let pythonCommand = "python3 $HOME/colorized-python/runner.py -i \(strInput) -o \(strOutput) -r \(renderFactor)"
-        
-        let task = Process()
-        task.launchPath = "/bin/sh"
-        task.arguments = ["-c", envCommand + "; " + pythonCommand]
-        
-        let myPipe = Pipe()
-        task.standardOutput = myPipe
-        let outHandle = myPipe.fileHandleForReading
-          
-        let errPipe = Pipe()
-        task.standardError = errPipe
-        let errHandle = errPipe.fileHandleForReading
-        
-        outHandle.readabilityHandler = { pipe in
-            if let line = String(data: pipe.availableData, encoding: String.Encoding(rawValue: NSUTF8StringEncoding) ) {
-                if pipe.availableData.isEmpty  {
-                    print("EOF stdout: This command is done!")
-                    myPipe.fileHandleForReading.readabilityHandler = nil
-                    DispatchQueue.main.async {
-                        //                        Update result
-                        
-                    }
-                }
-                else {
-                    if line != "" && line.count > 0 {
-                        print("New output stdout: \(line)")
-                        // Update progress
-                        if line.contains("%") {
-                            
-                        }
-//                        self.updateString(line)
-                    }
-                }
-
+        for videoFile in videoFiles {
+            var parentFolder = videoFile.url
+            
+            if sameAsSource {
+                parentFolder = videoFile.url.deletingLastPathComponent()
             }
+            else {
+                parentFolder = URL.init(fileURLWithPath: outputPath, isDirectory: true)
+            }
+            
+            let finalURL = parentFolder.appendingPathComponent(videoFile.name)
+            print(finalURL)
+            outputs.append(finalURL.path)
         }
         
-        errHandle.readabilityHandler = { pipe in
-            if let line = String(data: pipe.availableData, encoding: String.Encoding(rawValue: NSUTF8StringEncoding) ) {
-                if pipe.availableData.isEmpty  {
-                    print("EOF stderr: This command is done!")
-                    errPipe.fileHandleForReading.readabilityHandler = nil
-                    DispatchQueue.main.async {
-                        // Update result
-                    }
-                }
-                else {
-                    if line != "" && line.count > 0 {
-                        print("New output stderr: \(line)")
-//                        self.updateString(line)
-                    }
-                }
-
-            }
-        }
-
-        task.launch()
-        task.waitUntilExit()
     }
     
     func runInstallerInTerminal() {

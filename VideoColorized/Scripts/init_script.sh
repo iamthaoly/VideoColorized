@@ -38,8 +38,6 @@ download_models() {
     fi
 }
 
-
-
 runConvert() {
     cd $HOME/colorized-python
     python3 runner.py
@@ -49,15 +47,8 @@ main() {
     clone_repo
     install_requirements
     download_models
-    $ECHO "Install completed!"
+    $ECHO "COMPLETED!"
 }
 
 ($ECHO "I am a script! 123">&2)2>&1
-#    osascript -e 'do shell script "(echo a>&2)2>&1"'
 main 2>&1
-
-($ECHO "I am a script! 321">&2)2>&1
-($ECHO "I am a script! 000">&2)2>&1
-
-#echo "I am a script! 000"
-
