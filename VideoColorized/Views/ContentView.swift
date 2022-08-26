@@ -98,7 +98,7 @@ struct InputVideo: View {
     
 //    @Binding var files: [VideoFile]
     
-    func isVideoExist(pathToCheck: String) -> Bool {
+    func isVideoExistInList(pathToCheck: String) -> Bool {
         for item in manager.videoFiles {
             if pathToCheck == item.path {
                 return true
@@ -121,7 +121,7 @@ struct InputVideo: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             
             VStack(alignment: .center, spacing: manager.videoFiles.count > 1 ? 0 : 20) {
-                if manager.videoFiles.count > 1 {
+                if manager.videoFiles.count > 0 {
                     VStack {
                         if #available(macOS 12.0, *) {
                             Table(manager.videoFiles, selection: $selection) {
@@ -178,7 +178,7 @@ struct InputVideo: View {
                 for provider in providers {
                     provider.loadDataRepresentation(forTypeIdentifier: "public.file-url", completionHandler: { (data, error) in
                         if let data = data, let path = NSString(data: data, encoding: 4), let url = URL(string: path as String) {
-                            if (allowVideoExtensions.contains(url.pathExtension) && isVideoExist(pathToCheck: url.path) == false) {
+                            if (allowVideoExtensions.contains(url.pathExtension) && isVideoExistInList(pathToCheck: url.path) == false) {
                     
                                 DispatchQueue.main.async {
                                     let newVideo = VideoFile(path: url.path)

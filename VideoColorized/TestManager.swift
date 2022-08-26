@@ -6,7 +6,6 @@
 //
 
 import Foundation
-//import Darwin
 
 class TestManager: ObservableObject {
     var total: Int
@@ -17,14 +16,16 @@ class TestManager: ObservableObject {
     @Published var isInitDone: Bool = false
     
     @Published var videoFiles: [VideoFile] = [
-        VideoFile(path: "~/Desktop/My Videos/sample.mp4"),
-        VideoFile(path: "~/Desktop/My Videos/testing.mp4")
+//        VideoFile(path: "/Users/ly/Desktop/input3_10fps.mp4"),
+//        VideoFile(path: "~/Desktop/My Videos/testing.mp4")
     ]
     @Published var currentVideoIndex: Int?
     
     @Published var isRunning: Bool = false
     
-    let PYTHON_PATH = FileManager.default.homeDirectoryForCurrentUser.path + "/colorized-python"
+    let PROJECT_PATH = FileManager.default.homeDirectoryForCurrentUser.path + "/colorized-python"
+    let TERMINAL_PATH = "/System/Applications/Utilities/Terminal.app"
+
 //    var currentProgress: Float? = 0.5
 //    var totalProgress: Float? = 0.75
     
@@ -54,7 +55,6 @@ class TestManager: ObservableObject {
     
     private func getInputPathArr() -> [String] {
         var res: [String] = []
-        
         for videoFile in videoFiles {
             res.append(videoFile.path)
         }
@@ -76,7 +76,8 @@ class TestManager: ObservableObject {
         
         for videoFile in videoFiles {
             var parentFolder = videoFile.url
-            
+            let nameWithoutExtension = videoFile.url.deletingPathExtension().lastPathComponent
+            let newName = nameWithoutExtension + "_colored" + "." + videoFile.url.pathExtension
             if sameAsSource {
                 parentFolder = videoFile.url.deletingLastPathComponent()
             }
@@ -84,7 +85,7 @@ class TestManager: ObservableObject {
                 parentFolder = URL.init(fileURLWithPath: outputPath, isDirectory: true)
             }
             
-            let finalURL = parentFolder.appendingPathComponent(videoFile.name)
+            let finalURL = parentFolder.appendingPathComponent(newName)
             print(finalURL)
             outputs.append(finalURL.path)
         }
@@ -95,43 +96,95 @@ class TestManager: ObservableObject {
         print(strInputs)
         print(strOutputs)
         
-        let command = "python3 -i \"\(strInputs)\" -o \"\(strOutputs)\" -r \(renderFactor)"
+        let convertScriptURL = URL(fileURLWithPath: "colorize.sh", relativeTo: Bundle.main.resourceURL)
+        let runnerPath = PROJECT_PATH + "/" + "runner.py"
+        let runProjectCommand = ". $HOME/colorized-python/venv/bin/activate; python3 \(runnerPath) -i \"\(strInputs)\" -o \"\(strOutputs)\" -r \(renderFactor)"
         print("Convert command:")
-        print(command)
+        print(runProjectCommand)
+
+        print(convertScriptURL)
+        let bashCommand = "echo '\(runProjectCommand)' > \(convertScriptURL.path); chmod 755 \(convertScriptURL.path); cat \(convertScriptURL.path)"
+        print("Bash command to paste python command")
+        print(bashCommand)
+        print(bashCommand.runAsCommand())
         
+        // Run convert.sh
+        let command = "open -a \(TERMINAL_PATH) " + convertScriptURL.path
+        print(command)
+        print(command.runAsCommand())
     }
     
     func runInstallerInTerminal() {
         let url = URL(fileURLWithPath: "brew_script.sh", relativeTo: Bundle.main.resourceURL)
         let url2 = URL(fileURLWithPath: "init_script.sh", relativeTo: Bundle.main.resourceURL)
         let url3 = URL(fileURLWithPath: "FIRST_RUN.sh", relativeTo: Bundle.main.resourceURL)
+        let url4 = URL(fileURLWithPath: "convert.sh", relativeTo: Bundle.main.resourceURL)
+
 
 //        let brew_script = "sh " + url.path
 //        let init_script = "sudo sh " + url2.path
-        let terminalPath = "/System/Applications/Utilities/Terminal.app"
 
-        let command = "open -a \(terminalPath) " + url3.path
+        let command = "open -a \(TERMINAL_PATH) " + url3.path
         print("Current install command")
         print(command)
         
         print("Set the running permission for the script...")
-        let setPermissionScript = ["chmod 755 " + url.path, "chmod 755 " + url2.path, "chmod 755 " + url3.path]
+        let setPermissionScript = ["chmod 755 " + url.path, "chmod 755 " + url2.path, "chmod 755 " + url3.path, "chmod 755 " + url4.path]
         for item in setPermissionScript {
             print(item)
             print(item.runAsCommand())
         }
-//        let res = command.runAsCommand()
-//        print(res)
+        let res = command.runAsCommand()
+        print(res)
         
-    
     }
     
 }
+
+// MARK: - EXTENSION - STRING
+extension String {
+    func runAsCommand() -> String {
+        let pipe = Pipe()
+        let task = Process()
+        task.launchPath = "/bin/sh"
+        task.arguments = ["-c", String(format:"%@", self)]
+        task.standardOutput = pipe
+        let file = pipe.fileHandleForReading
+        task.launch()
+//        task.waitUntilExit()
+        if let result = NSString(data: file.readDataToEndOfFile(), encoding: String.Encoding.utf8.rawValue) {
+            return result as String
+        }
+        else {
+            return "--- Error running command - Unable to initialize string from file data ---"
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // MARK: - ARCHIVED
 extension TestManager {
     
     private func runPythonScript() -> String {
-        let runnerPath = PYTHON_PATH + "/" + "runner.py"
+        let runnerPath = PROJECT_PATH + "/" + "runner.py"
         let command = "python3 " + runnerPath
         
         return command.runAsCommand()
@@ -404,7 +457,7 @@ extension TestManager {
         debugPrint(res)
         updateString(res + "\n")
         
-        let runnerPath = PYTHON_PATH + "/" + "runner.py"
+        let runnerPath = PROJECT_PATH + "/" + "runner.py"
         let command = "python3 " + runnerPath
         
         print("Command: ")
@@ -441,21 +494,3 @@ extension TestManager {
     }
 }
 
-extension String {
-    func runAsCommand() -> String {
-        let pipe = Pipe()
-        let task = Process()
-        task.launchPath = "/bin/sh"
-        task.arguments = ["-c", String(format:"%@", self)]
-        task.standardOutput = pipe
-        let file = pipe.fileHandleForReading
-        task.launch()
-//        task.waitUntilExit()
-        if let result = NSString(data: file.readDataToEndOfFile(), encoding: String.Encoding.utf8.rawValue) {
-            return result as String
-        }
-        else {
-            return "--- Error running command - Unable to initialize string from file data ---"
-        }
-    }
-}
