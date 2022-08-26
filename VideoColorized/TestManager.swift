@@ -55,6 +55,8 @@ class TestManager: ObservableObject {
         }
     }
     
+    // MARK: - PUBLIC
+    
     func calcTotalProgress() -> Double {
         let res = currentVideoIndex == nil ? 0.0 : 100.0 / Double(videoFiles.count) * Double(currentVideoIndex! + 1)
         
@@ -72,7 +74,7 @@ class TestManager: ObservableObject {
 //        let executableURL = URL(fileURLWithPath: "/usr/bin/say")
 ////           self.isRunning = true
 //        try! Process.run(executableURL, arguments: [],
-//                        terminationHandler: { _§ in print("Stop running.") })
+//                        terminationHandler: { _ in print("Stop running.") })
         
 //        let task = Process()
 //        task.launchPath = "pwd"
@@ -91,23 +93,17 @@ class TestManager: ObservableObject {
         print(output)
 
     }
-
     
-    // MARK: PUBLIC
-    func colorizeVideos(sameAsSource: Bool = true, renderFactor: Int = 21) {
-        clearResult()
-        // source
-        print("Activate env")
-        let envCommand = ". $HOME/colorized-python/venv/bin/activate"
-        
-        let strInput = ""
-        let strOutput = ""
-        let pythonCommand = "python3 runner.py -i \(strInput) -o \(strOutput) -r \(renderFactor)"
-        
+    func testGetProcess() {
+//        let pythonCommand = "python3 sers/ly/Desktop/progress.py"
         
         let task = Process()
         task.launchPath = "/bin/sh"
-        task.arguments = ["-c", envCommand + "; " + pythonCommand]
+
+//        task.launchPath = "/usr/bin/python3"
+//        task.arguments = ["-c", "python3" + "; " + pythonCommand]
+//        task.arguments = [pythonCommand]
+        task.arguments = ["-c", "ls $HOME/Desktop"]
         
         let myPipe = Pipe()
         task.standardOutput = myPipe
@@ -123,7 +119,82 @@ class TestManager: ObservableObject {
                     print("EOF stdout: This command is done!")
                     myPipe.fileHandleForReading.readabilityHandler = nil
                     DispatchQueue.main.async {
-//                        Update result
+                        // Update result
+                    }
+                }
+                else {
+                    print("New output stdout: \(line)")
+                    self.updateString(line)
+
+                    if line != "" && line.count > 0 {
+                        print("New output stdout: \(line)")
+                        // Update progress
+                        if line.contains("%") {
+                            print(line)
+                        }
+//                        self.updateString(line)
+                    }
+                }
+
+            }
+        }
+        
+        errHandle.readabilityHandler = { pipe in
+            if let line = String(data: pipe.availableData, encoding: String.Encoding(rawValue: NSUTF8StringEncoding) ) {
+                if pipe.availableData.isEmpty  {
+                    print("EOF stderr: This command is done!")
+                    errPipe.fileHandleForReading.readabilityHandler = nil
+                    DispatchQueue.main.async {
+                        // Update result
+                        // result - - - - - - - - - - - - - - - - - - - - - - - - -
+                    }
+                }
+                else {
+                    print("New output stderr: \(line)")
+                    self.updateString(line)
+                    if line != "" && line.count > 0 {
+                        print("New output stderr: \(line)")
+//                        self.updateString(line)
+//
+                    }
+                }
+
+            }
+        }
+        task.launch()
+//        task.waitUntilExit()
+    }
+
+    func colorizeVideos(sameAsSource: Bool = true, renderFactor: Int = 21) {
+        clearResult()
+        // source result
+        print("Activate env")
+        let envCommand = ". $HOME/colorized-python/venv/bin/activate"
+        let strInput = "$HOME/colorized-python/input3_color_10fps.mp4"
+        let strOutput = "$HOME/Desktop/sample_output.mp4"
+        
+        let pythonCommand = "python3 $HOME/colorized-python/runner.py -i \(strInput) -o \(strOutput) -r \(renderFactor)"
+        
+        let task = Process()
+        task.launchPath = "/bin/sh"
+        task.arguments = ["-c", envCommand + "; " + pythonCommand]
+        
+        let myPipe = Pipe()
+        task.standardOutput = myPipe
+        let outHandle = myPipe.fileHandleForReading
+          
+        let errPipe = Pipe()
+        task.standardError = errPipe
+        let errHandle = errPipe.fileHandleForReading
+        
+        outHandle.readabilityHandler = { pipe in
+            if let line = String(data: pipe.availableData, encoding: String.Encoding(rawValue: NSUTF8StringEncoding) ) {
+                if pipe.availableData.isEmpty  {
+                    print("EOF stdout: This command is done!")
+                    myPipe.fileHandleForReading.readabilityHandler = nil
+                    DispatchQueue.main.async {
+                        //                        Update result
+                        
                     }
                 }
                 else {
@@ -163,19 +234,46 @@ class TestManager: ObservableObject {
         task.waitUntilExit()
     }
     
+    func runInstallerInTerminal() {
+        let url = URL(fileURLWithPath: "brew_script.sh", relativeTo: Bundle.main.resourceURL)
+        let url2 = URL(fileURLWithPath: "init_script.sh", relativeTo: Bundle.main.resourceURL)
+        let url3 = URL(fileURLWithPath: "FIRST_RUN.sh", relativeTo: Bundle.main.resourceURL)
+
+        let brew_script = "sh " + url.path
+        let init_script = "sudo sh " + url2.path
+        let terminalPath = "/System/Applications/Utilities/Terminal.app"
+        // osascript -e 'tell application "Terminal" to do script "echo 123"'
+        var command = #"osascript -e 'tell application "Terminal" to do shell script ""# + brew_script + "\"  with administrator privileges'"
+        command = #"osascript -e 'tell application "Terminal" to do shell script ""# + "sudo installer -vers; \(brew_script); \(init_script)" + "\"  with administrator privileges'"
+        command = "open -a /System/Applications/Utilities/Terminal.app " + url3.path
+        print("Current install command")
+        print(command)
+        
+        print("Set the running permission for the script...")
+        let setPermissionScript = ["chmod 755 " + url.path, "chmod 755 " + url2.path, "chmod 755 " + url3.path]
+        for item in setPermissionScript {
+            print(item)
+            print(item.runAsCommand())
+        }
+//        let res = command.runAsCommand()
+//        print(res)
+        
+    
+    }
+    
     func runBrewScript() {
 //        setbuf(stdout, nil)
         terminalString = ""
         let url = URL(fileURLWithPath: "brew_script.sh", relativeTo: Bundle.main.resourceURL)
-        let command = "sh " + url.path
-        
+        var command = "sh " + url.path
+        command = "echo \"abc\""
         print("Command: ")
         print(command)
         updateString(command + "\n")
 
         let task = Process()
         task.launchPath = "/bin/sh"
-        task.arguments = ["-c", command]
+        task.arguments = ["-c", "echo abc"]
 //        task.arguments = ["-c", "echo 1 ; sleep 1 ; echo 2 ; sleep 1 ; echo 3 ; sleep 1 ; echo 4"]
 
         let myPipe = Pipe()

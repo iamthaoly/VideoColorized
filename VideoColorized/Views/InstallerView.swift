@@ -32,7 +32,9 @@ struct InstallerView: View {
                 .font(.title3)
                 .padding(.bottom, 15.0)
             Button(action: {
-                testManager.runBrewScript()
+                testManager.runInstallerInTerminal()
+//                testManager.testGetProcess()
+//                testManager.testGetProcess()
             }) {
                 Text("Start Now")
             }
