@@ -20,7 +20,7 @@ install_requirements() {
     $ECHO "Create a virtual environment"
     python3 -m venv venv
     activate
-    pip3 install -r requirements.txt
+    pip3 install -r requirements.txt --default-timeout=100 future
     pip3 install --no-deps fastai==1.0.60
 }
 

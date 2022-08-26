@@ -101,12 +101,12 @@ class TestManager: ObservableObject {
         
         let convertScriptURL = URL(fileURLWithPath: "colorize.command", relativeTo: Bundle.main.resourceURL)
         let runnerPath = PROJECT_PATH + "/" + "runner.py"
-        let runProjectCommand = ". $HOME/colorized-python/venv/bin/activate; python3 \(runnerPath) -i \"\(strInputs)\" -o \"\(strOutputs)\" -r \(renderFactor)"
+        let runProjectCommand = "echo \"Colorize from sh file...\"; . $HOME/colorized-python/venv/bin/activate; python3 \(runnerPath) -i \"\(strInputs)\" -o \"\(strOutputs)\" -r \(renderFactor)"
         print("Convert command:")
         print(runProjectCommand)
 
         print(convertScriptURL)
-        let bashCommand = "sudo chown -R $(whoami) \(convertScriptURL.path); echo '\(runProjectCommand)' > \(convertScriptURL.path); chmod +x \(convertScriptURL.path); cat \(convertScriptURL.path)"
+        let bashCommand = "chown -R $(whoami) \(convertScriptURL.path); echo '\(runProjectCommand)' > \(convertScriptURL.path); chmod +x \(convertScriptURL.path); cat \(convertScriptURL.path)"
         print("Bash command to paste python command")
         print(bashCommand)
         print(bashCommand.runAsCommand())
