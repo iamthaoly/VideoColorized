@@ -52,8 +52,18 @@ public struct ContentView: View {
 //                    isDisplayCompletedAlert = true
 //                }
 //                testManager.runTerminal()
-                testManager.isRunning = !testManager.isRunning
-                testManager.colorizeVideos(sameAsSource: isSameAsSource, outputPath: outputPath, renderFactor: renderFactor)
+                if testManager.videoFiles.count > 0 {
+                    if testManager.isRunning {
+                        testManager.isRunning = !testManager.isRunning
+                    }
+                    else {
+                        testManager.isRunning = !testManager.isRunning
+                        testManager.colorizeVideos(sameAsSource: isSameAsSource, outputPath: outputPath, renderFactor: renderFactor)
+                    }
+
+
+                }
+
             }) {
                 Text(testManager.isRunning ? "STOP" : "START")
                     .font(.system(size: 13.0))

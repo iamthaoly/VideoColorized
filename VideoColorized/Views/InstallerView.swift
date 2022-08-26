@@ -12,18 +12,22 @@ struct InstallerView: View {
     @State var isDisplayCompletedAlert = false
     @State var moveToHomeScreen = true
     @ObservedObject var testManager: TestManager
-
+    @State var installerText = "Start Now"
+    
     init() {
         self.testManager = TestManager.shared
         testManager.terminalString =
         """
         The app needs to download and install some packages.
-        Please click on "Start Now" button to start the installation progress.
+        Click on "Start Now" button to start the installation progress.
+        When the progress had COMPLETED, click on "Next".
         \n
         Note: The installation progress will take about 30 minutes to 2 hours. Please have some tea and come back later. :)\n
         -The developer-
         """
     }
+
+
     
     var body: some View {
         VStack() {
@@ -32,11 +36,19 @@ struct InstallerView: View {
                 .font(.title3)
                 .padding(.bottom, 15.0)
             Button(action: {
-                testManager.runInstallerInTerminal()
-//                testManager.testGetProcess()
-//                testManager.testGetProcess()
+                if installerText == "Start Now" {
+                    testManager.runInstallerInTerminal()
+                    installerText = "Next"
+                }
+                else {
+                    Utils.setCompleteInstaller(true)
+                    SwiftUIWindow.open {_ in
+                        HomeScreen()
+                    }
+                }
+                
             }) {
-                Text("Start Now")
+                Text(installerText)
             }
             
             Text("Installer log")

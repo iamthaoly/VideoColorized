@@ -11,6 +11,7 @@ import SwiftUI
 struct HomeScreen: View {
     var body: some View {
         ContentView()
+            .frame(minWidth: 500, minHeight: 600)
 //        MyTableView(headers: [])
     }
 }

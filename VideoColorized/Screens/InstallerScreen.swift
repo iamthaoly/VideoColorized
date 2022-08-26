@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct InstallerScreen: View {
+//    let myWindow: NSWindow?
+
     var body: some View {
         InstallerView()
     }

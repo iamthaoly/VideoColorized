@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftUIWindow
 
 @main
 struct VideoColorizedApp: App {
@@ -16,17 +17,39 @@ struct VideoColorizedApp: App {
                     .navigationTitle("Homescreen")
             }
             else {
-                HomeScreen()
-                    .navigationTitle("Homescreen")
-//                InstallerScreen()
-//                    .navigationTitle("Installer")
+                //                HomeScreen()
+                //                    .navigationTitle("Homescreen")
+                InstallerScreen()
+                    .navigationTitle("Installer")
             }
             
         }
-//        WindowGroup("InstallerWindow") {
-//            InstallerScreen()
-//        }.handlesExternalEvents(matching: Set(arrayLiteral: "InstallerWindow"))
-            
+        .commands {
+            CommandGroup(replacing: .help) {
+                Button(action: {
+                    SwiftUIWindow.open {_ in
+                        InstallerScreen()
+                    }
+                }) {
+                    Text("Open installer")
+                }
+            }
+        }
+        //        WindowGroup("InstallerWindow") {
+        //            InstallerScreen()
+        //        }.handlesExternalEvents(matching: Set(arrayLiteral: "InstallerWindow"))
+        
+    }
+    
+    func showWindow() {
+        var windowRef: NSWindow
+        
+        windowRef = NSWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 500, height: 600),
+            styleMask: [.titled, .closable, .miniaturizable, .fullSizeContentView],
+            backing: .buffered, defer: false)
+//        windowRef.contentView = NSHostingView(rootView: InstallerScreen(myWindow: windowRef))
+        windowRef.makeKeyAndOrderFront(nil)
     }
 }
 
