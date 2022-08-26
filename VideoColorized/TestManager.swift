@@ -17,8 +17,8 @@ class TestManager: ObservableObject {
     @Published var isInitDone: Bool = false
     
     @Published var videoFiles: [VideoFile] = [
-//        VideoFile(path: "/Users/ly/Desktop/input3_10fps.mp4"),
-//        VideoFile(path: "~/Desktop/My Videos/testing.mp4")
+        VideoFile(path: "/Users/ly/Desktop/input3_10fps.mp4"),
+        VideoFile(path: "~/Desktop/My Videos/testing.mp4")
     ]
     @Published var currentVideoIndex: Int?
     
@@ -140,7 +140,7 @@ class TestManager: ObservableObject {
         
         print("Set the running permission for the script...")
         // ko dc thi dung applescript set permission
-        let setPermissionScript = ["chmod 755 " + url.path, "chmod 755 " + url2.path, "chmod 755 " + url3.path, "chmod 755 " + url4.path]
+        let setPermissionScript = ["sudo chmod 755 " + url.path, "sudo chmod 755 " + url2.path, "sudo chmod 755 " + url3.path, "sudo chmod 755 " + url4.path]
         let arr = setPermissionScript.joined(separator: "; ")
         let perCommand =  "osascript -e 'do shell script \"\(arr)\" with administrator privileges'"
         perCommand.runAsCommand()

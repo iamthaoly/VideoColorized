@@ -12,7 +12,7 @@ public struct ContentView: View {
     
     @ObservedObject var testManager: TestManager
     
-    @State private var isSameAsSource = false
+    @State private var isSameAsSource = true
     @State var outputPath: String = UserDefaults.standard.string(forKey: "outputPath") ?? ""
     @State var renderFactor: Int = 21
     
@@ -130,7 +130,7 @@ struct InputVideo: View {
                 .fontWeight(.bold)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
-            VStack(alignment: .center, spacing: manager.videoFiles.count > 1 ? 0 : 20) {
+            VStack(alignment: .center, spacing: manager.videoFiles.count > 0 ? 0 : 20) {
                 if manager.videoFiles.count > 0 {
                     VStack {
                         if #available(macOS 12.0, *) {
@@ -201,7 +201,7 @@ struct InputVideo: View {
                     Text("Drop your videos here")
                 }
             }
-            .padding(.all, manager.videoFiles.count > 1 ? 0 : 20)
+            .padding(.all, manager.videoFiles.count > 0 ? 0 : 20)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .cornerRadius(10)
             .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color(red: 0.29, green: 0.57, blue: 0.97), lineWidth: 1))
