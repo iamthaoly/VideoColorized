@@ -165,9 +165,30 @@ struct InputVideo: View {
                         .resizable()
                         .frame(width: 64, height: 64)
                         .foregroundColor(.blue)
+                        .onTapGesture {
+                            let dialog = NSOpenPanel()
+                            dialog.title = "Choose a folder"
+                            dialog.showsResizeIndicator = true
+                            dialog.showsHiddenFiles = false
+                            dialog.canChooseDirectories = false
+                            dialog.canCreateDirectories = true
+                            dialog.canChooseFiles = true
+                            dialog.allowsMultipleSelection = true
+                            
+                            if dialog.runModal() == NSApplication.ModalResponse.OK {
+                                let result = dialog.urls // Pathname of the file
+                                print(result)
+                                for url in result {
+                                    DispatchQueue.main.async {
+                                        let video = VideoFile(path: url.path)
+                                        manager.videoFiles.append(video)
+                                    }
+                                }
+                            } else {
+                                return
+                            }
+                        }
                     Text("Drop your videos here")
-                        .font(.custom("Inter", size: 13))
-                        .foregroundColor(Color(red: 0, green: 0, blue: 0, opacity: 0.35))
                 }
             }
             .padding(.all, manager.videoFiles.count > 1 ? 0 : 20)
