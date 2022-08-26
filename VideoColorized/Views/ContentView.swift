@@ -9,9 +9,9 @@ import SwiftUI
 
 public struct ContentView: View {
     @State var isDisplayCompletedAlert = false
-
+    
     @ObservedObject var testManager: TestManager
-
+    
     @State private var isSameAsSource = false
     
     @State private var files = [
@@ -56,21 +56,22 @@ public struct ContentView: View {
                 //                //                fatalError("You click on the start button")
                 //                testManager?.runProcess()
                 // Display popup
-                print("Increase current!")
-                testManager.increase()
-                if testManager.current >= 100.0 {
-                    isDisplayCompletedAlert = true
-                }
-                testManager.runTerminal()
+//                print("Increase current!")
+//                testManager.increase()
+//                if testManager.current >= 100.0 {
+//                    isDisplayCompletedAlert = true
+//                }
+//                testManager.runTerminal()
+                testManager.isRunning = !testManager.isRunning
             }) {
-                Text("START")
+                Text(testManager.isRunning ? "STOP" : "START")
                     .font(.system(size: 13.0))
                     .fontWeight(.medium)
                     .padding(22)
                     .frame(height: 25)
                     .frame(maxWidth: .infinity)
-                //                    .foregroundStyle(.red)
-                //                    .background(Color.blue)
+//                    .foregroundStyle(.red)
+//                        .background(Color.blue)
                 //                    .foregroundColor(Color.white)
             }
             .frame(height: 30)
@@ -84,17 +85,16 @@ public struct ContentView: View {
                     //                    }
                 }
                 return Alert(title: Text("Convert completed"), primaryButton: .default(Text("OK")), secondaryButton: .default(Text("Cancel")))
-//                                Button("OK") { }
+                //                                Button("OK") { }
             }
             
             ConvertProgressView(current: self.$testManager.current)
-            ScrollView {
-                    Text(testManager.terminalString)
-                        .multilineTextAlignment(.leading)
-                        .fixedSize(horizontal: false, vertical: true)
-            }
-            .frame(maxWidth: .infinity)
-            
+//            ScrollView {
+//                Text(testManager.terminalString)
+//                    .multilineTextAlignment(.leading)
+//                    .fixedSize(horizontal: false, vertical: true)
+//            }
+//            .frame(maxWidth: .infinity)
         }
         .padding(.horizontal, 30)
         .padding(.vertical, 20)
@@ -104,7 +104,7 @@ public struct ContentView: View {
 
 
 struct InputVideo: View {
-
+    
     @Binding var files: [VideoFile]
     
     func isVideoExist(pathToCheck: String) -> Bool {
@@ -118,7 +118,7 @@ struct InputVideo: View {
     
     @State private var selection = Set<VideoFile.ID>() // <-- Use this for multiple rows selections
     @State private var dragOver = false
-
+    
     let allowVideoExtensions = ["mp4", "mov"]
     
     var body: some View {
@@ -132,15 +132,20 @@ struct InputVideo: View {
                 if files.count > 1 {
                     VStack {
                         if #available(macOS 12.0, *) {
-//                            Table(files, selection: $selection) {
-//                                TableColumn("Name", value: \.name)
-//
-//                                //                TableColumn("") { file in
-//                                //                    Text(String(file.path))
-//                                //                }
-//                            }
-//                            //                .offset(y: -27)
-//                            .opacity(0.85)
+                            Table(files, selection: $selection) {
+                                TableColumn("Name", value: \.name)
+                                
+                                //                TableColumn("") { file in
+                                //                    Text(String(file.path))
+                                //                }
+                            }
+                            //                .offset(y: -27)
+                            .opacity(0.85)
+                            .frame(minHeight: 100)
+
+                            
+                        } else {
+                            // Fallback on earlier versions
                             List {
                                 HStack() {
                                     VStack(alignment: .leading, spacing: 5.0) {
@@ -150,32 +155,12 @@ struct InputVideo: View {
                                             .foregroundColor(.primary)
                                             .font(.headline)
                                         Divider()
-//                                        Divider()
+                                        //                                        Divider()
                                         ForEach(files) { file in
                                             //  Text(person.name) this is list ...
                                             Text(file.path)
                                         }
                                     }
-                                }
-                            }
-                            .frame(minHeight: 100)
-
-                        } else {
-                            // Fallback on earlier versions
-                            List {
-                                HStack() {
-                                    VStack {
-                                        //Column 1 Data
-                                        Text("Name")
-                                            .foregroundColor(.primary)
-                                            .font(.headline)
-                                        Divider()
-                                        ForEach(files) { file in
-                                            //  Text(person.name) this is list ...
-                                            Text(file.path)
-                                        }
-                                    }
-                                    Divider()
                                 }
                             }
                             .frame(minHeight: 100)
@@ -212,7 +197,7 @@ struct InputVideo: View {
                             else {
                                 print("This file type is not supported.")
                             }
-                           
+                            
                         }
                     })
                 }
@@ -254,7 +239,7 @@ struct ConvertProgressView: View {
     private let TOTAL = 100.0
     @Binding var current: Double
     
-//    var manager: TestManager
+    //    var manager: TestManager
     
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
@@ -292,8 +277,8 @@ struct ConvertProgressView: View {
                         ProgressView(value: TestManager.shared.calcTotalProgress(), total: TOTAL)
                             .progressViewStyle(LinearProgressViewStyle(tint: Color.green))
                     }
-//                    Text("75%")
-                    Text("\(TestManager.shared.calcTotalProgress()) %")
+                    //                    Text("75%")
+                    Text(String(TestManager.shared.calcTotalProgress()) + " %")
                         .fontWeight(.bold)
                 }
                 .frame(maxWidth: .infinity)
@@ -318,7 +303,6 @@ struct DestinationView: View {
                     VStack {
                         HStack() {
                             TextField("", text: $outputPath)
-                            //                                .opacity(0.85)
                                 .disabled(true)
                             Button(action: {
                                 let dialog = NSOpenPanel()
@@ -329,7 +313,7 @@ struct DestinationView: View {
                                 dialog.canCreateDirectories = true
                                 dialog.canChooseFiles = false
                                 dialog.allowsMultipleSelection = false
-
+                                
                                 if dialog.runModal() == NSApplication.ModalResponse.OK {
                                     let result = dialog.url // Pathname of the file
                                     if result != nil {
@@ -337,7 +321,6 @@ struct DestinationView: View {
                                         UserDefaults.standard.set(outputPath, forKey: "outputPath")
                                     }
                                 } else {
-                                    // User clicked on "Cancel"
                                     return
                                 }
                             }) {
@@ -349,7 +332,7 @@ struct DestinationView: View {
                             }) {
                                 Text("Open")
                             }
-
+                            
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.all, 10.0)
