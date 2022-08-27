@@ -13,6 +13,10 @@
 		082BDE2628854B14004AADC3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 082BDE2528854B14004AADC3 /* Assets.xcassets */; };
 		082BDE2928854B14004AADC3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 082BDE2828854B14004AADC3 /* Preview Assets.xcassets */; };
 		083BF60B28BA4E72009CA4BC /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083BF60A28BA4E72009CA4BC /* Constant.swift */; };
+		083BF60D28BA52B8009CA4BC /* InputVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083BF60C28BA52B8009CA4BC /* InputVideoView.swift */; };
+		083BF60F28BA536D009CA4BC /* DestinationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083BF60E28BA536D009CA4BC /* DestinationView.swift */; };
+		083BF61128BA53CD009CA4BC /* ConvertProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083BF61028BA53CD009CA4BC /* ConvertProgressView.swift */; };
+		083BF61328BA5418009CA4BC /* CustomStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083BF61228BA5418009CA4BC /* CustomStyle.swift */; };
 		086BABC928A7BD3E00123025 /* brew_script.sh in Resources */ = {isa = PBXBuildFile; fileRef = 086BABC828A7BD3E00123025 /* brew_script.sh */; };
 		086BABCC28A7BED200123025 /* colorize.command in Resources */ = {isa = PBXBuildFile; fileRef = 086BABCB28A7BECF00123025 /* colorize.command */; };
 		087381FF28AB86D0008DD049 /* init_script.sh in Resources */ = {isa = PBXBuildFile; fileRef = 086BABCA28A7BD7800123025 /* init_script.sh */; };
@@ -37,6 +41,10 @@
 		082BDE2828854B14004AADC3 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		082BDE2A28854B14004AADC3 /* VideoColorized.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VideoColorized.entitlements; sourceTree = "<group>"; };
 		083BF60A28BA4E72009CA4BC /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
+		083BF60C28BA52B8009CA4BC /* InputVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputVideoView.swift; sourceTree = "<group>"; };
+		083BF60E28BA536D009CA4BC /* DestinationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationView.swift; sourceTree = "<group>"; };
+		083BF61028BA53CD009CA4BC /* ConvertProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertProgressView.swift; sourceTree = "<group>"; };
+		083BF61228BA5418009CA4BC /* CustomStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomStyle.swift; sourceTree = "<group>"; };
 		086BABC828A7BD3E00123025 /* brew_script.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = brew_script.sh; sourceTree = "<group>"; };
 		086BABCA28A7BD7800123025 /* init_script.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = init_script.sh; sourceTree = "<group>"; };
 		086BABCB28A7BECF00123025 /* colorize.command */ = {isa = PBXFileReference; lastKnownFileType = text; path = colorize.command; sourceTree = "<group>"; };
@@ -119,6 +127,10 @@
 				082BDE2328854B12004AADC3 /* ContentView.swift */,
 				08A3C56028A8C69D008BC9E6 /* MyTableView.swift */,
 				08A3C56828A8F414008BC9E6 /* InstallerView.swift */,
+				083BF60C28BA52B8009CA4BC /* InputVideoView.swift */,
+				083BF60E28BA536D009CA4BC /* DestinationView.swift */,
+				083BF61028BA53CD009CA4BC /* ConvertProgressView.swift */,
+				083BF61228BA5418009CA4BC /* CustomStyle.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -233,15 +245,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				0885C82928A4B1F4007B98CD /* HomeScreen.swift in Sources */,
+				083BF61128BA53CD009CA4BC /* ConvertProgressView.swift in Sources */,
 				08A3C56128A8C69D008BC9E6 /* MyTableView.swift in Sources */,
 				08785CB028AB9D8B00EF33C7 /* Utils.swift in Sources */,
 				08A3C56728A8F392008BC9E6 /* InstallerScreen.swift in Sources */,
 				082BDE2428854B12004AADC3 /* ContentView.swift in Sources */,
+				083BF60D28BA52B8009CA4BC /* InputVideoView.swift in Sources */,
 				08A3C56328A8D579008BC9E6 /* VideoFile.swift in Sources */,
+				083BF60F28BA536D009CA4BC /* DestinationView.swift in Sources */,
 				082BDE2228854B12004AADC3 /* VideoColorizedApp.swift in Sources */,
 				08BD982D289FDD4200F3A140 /* TestManager.swift in Sources */,
 				083BF60B28BA4E72009CA4BC /* Constant.swift in Sources */,
 				081692B328BA411400C56F59 /* String+Extension.swift in Sources */,
+				083BF61328BA5418009CA4BC /* CustomStyle.swift in Sources */,
 				08A3C56928A8F414008BC9E6 /* InstallerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

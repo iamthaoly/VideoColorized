@@ -10,7 +10,7 @@ import AppKit
 
 class TestManager: ObservableObject {
     var total: Int
-    @Published var current: Double
+    @Published var currentVideoProgress: Double
     @Published var terminalString: String = ""
     
     @Published var isBrewDone: Bool = false
@@ -36,12 +36,12 @@ class TestManager: ObservableObject {
 
     private init() {
         total = 0
-        current = 0
+        currentVideoProgress = 0
     }
     
     private init(total: Int, current: Double) {
         self.total = total
-        self.current = current
+        self.currentVideoProgress = current
     }
     
     private func updateString(_ text: String) {
@@ -160,9 +160,6 @@ class TestManager: ObservableObject {
     }
     
 }
-
-// MARK: - EXTENSION - STRING
-
 
 
 
