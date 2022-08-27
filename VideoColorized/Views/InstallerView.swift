@@ -37,7 +37,8 @@ struct InstallerView: View {
                 .padding(.bottom, 15.0)
             Button(action: {
                 if installerText == "Start Now" {
-                    testManager.runInstallerInTerminal()
+//                    testManager.runInstallerInTerminal()
+                    testManager.testGetProcess()
                     installerText = "Next"
                 }
                 else {
@@ -45,6 +46,7 @@ struct InstallerView: View {
                     SwiftUIWindow.open {_ in
                         HomeScreen()
                     }
+                    testManager.closeWindow()
                 }
                 
             }) {

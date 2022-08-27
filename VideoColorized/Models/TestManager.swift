@@ -64,10 +64,16 @@ class TestManager: ObservableObject {
         
         return res
     }
-    
      
     
     // MARK: - PUBLIC
+    func closeWindow() {
+        if let window = NSApplication.shared.windows.first {
+            debugPrint("Close the first window.")
+            window.close()
+        }
+    }
+    
     func calcTotalProgress() -> Double {
         let res = currentVideoIndex == nil ? 0.0 : 100.0 / Double(videoFiles.count) * Double(currentVideoIndex! + 1)
         return res
@@ -156,24 +162,7 @@ class TestManager: ObservableObject {
 }
 
 // MARK: - EXTENSION - STRING
-extension String {
-    func runAsCommand() -> String {
-        let pipe = Pipe()
-        let task = Process()
-        task.launchPath = "/bin/sh"
-        task.arguments = ["-c", String(format:"%@", self)]
-        task.standardOutput = pipe
-        let file = pipe.fileHandleForReading
-        task.launch()
-        task.waitUntilExit()
-        if let result = NSString(data: file.readDataToEndOfFile(), encoding: String.Encoding.utf8.rawValue) {
-            return result as String
-        }
-        else {
-            return "--- Error running command - Unable to initialize string from file data ---"
-        }
-    }
-}
+
 
 
 
@@ -229,15 +218,13 @@ extension TestManager {
     }
     
     func testGetProcess() {
-//        let pythonCommand = "python3 sers/ly/Desktop/progress.py"
+        updateString("")
+        let pythonCommand = "/usr/local/bin/python3 /Users/ly/Desktop/progress.py"
         
         let task = Process()
         task.launchPath = "/bin/sh"
-
-//        task.launchPath = "/usr/bin/python3"
-//        task.arguments = ["-c", "python3" + "; " + pythonCommand]
-//        task.arguments = [pythonCommand]
-        task.arguments = ["-c", "ls $HOME/Desktop"]
+        
+        task.arguments = ["-c", pythonCommand]
         
         let myPipe = Pipe()
         task.standardOutput = myPipe
@@ -252,24 +239,29 @@ extension TestManager {
                 if pipe.availableData.isEmpty  {
                     print("EOF stdout: This command is done!")
                     myPipe.fileHandleForReading.readabilityHandler = nil
-                    DispatchQueue.main.async {
-                        // Update result
-                    }
                 }
                 else {
-                    print("New output stdout: \(line)")
-                    self.updateString(line)
-
-                    if line != "" && line.count > 0 {
-                        print("New output stdout: \(line)")
-                        // Update progress
-                        if line.contains("%") {
-                            print(line)
+//                    print("New output stdout: \(line)")
+//                    self.updateString(line)
+                    DispatchQueue.main.async {
+                        // Update result
+                        if line != "" && line.count > 0 {
+                            print("New output stdout: \(line)")
+                            // Update progress
+                            if line.contains("%") {
+//                                print(line)
+                                let queryRes = line.groups(for: Constant.REGEX_GET_PERCENT)
+                                debugPrint("Query res ")
+                                debugPrint(queryRes)
+                                if queryRes.count > 0 && queryRes[0].count > 0 {
+                                    let percent = (queryRes[0])[1]
+                                    debugPrint("Progress: " + percent + " (%)")
+                                }
+                            }
+    //                        self.updateString(line)
                         }
-//                        self.updateString(line)
                     }
                 }
-
             }
         }
         
@@ -279,24 +271,24 @@ extension TestManager {
                     print("EOF stderr: This command is done!")
                     errPipe.fileHandleForReading.readabilityHandler = nil
                     DispatchQueue.main.async {
-                        // Update result
-                        // result - - - - - - - - - - - - - - - - - - - - - - - - -
                     }
                 }
                 else {
                     print("New output stderr: \(line)")
                     self.updateString(line)
-                    if line != "" && line.count > 0 {
-                        print("New output stderr: \(line)")
-//                        self.updateString(line)
-//
+                    DispatchQueue.main.async {
+                        if line != "" && line.count > 0 {
+//                            print("New output stderr: \(line)")
+    //                        self.updateString(line)
+                        }
                     }
+
                 }
 
             }
         }
         task.launch()
-//        task.waitUntilExit()
+        task.waitUntilExit()
     }
     
     func runBrewScript() {

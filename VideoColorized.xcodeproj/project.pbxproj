@@ -7,10 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		081692B328BA411400C56F59 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081692B228BA411400C56F59 /* String+Extension.swift */; };
 		082BDE2228854B12004AADC3 /* VideoColorizedApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082BDE2128854B12004AADC3 /* VideoColorizedApp.swift */; };
 		082BDE2428854B12004AADC3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082BDE2328854B12004AADC3 /* ContentView.swift */; };
 		082BDE2628854B14004AADC3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 082BDE2528854B14004AADC3 /* Assets.xcassets */; };
 		082BDE2928854B14004AADC3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 082BDE2828854B14004AADC3 /* Preview Assets.xcassets */; };
+		083BF60B28BA4E72009CA4BC /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083BF60A28BA4E72009CA4BC /* Constant.swift */; };
 		086BABC928A7BD3E00123025 /* brew_script.sh in Resources */ = {isa = PBXBuildFile; fileRef = 086BABC828A7BD3E00123025 /* brew_script.sh */; };
 		086BABCC28A7BED200123025 /* colorize.command in Resources */ = {isa = PBXBuildFile; fileRef = 086BABCB28A7BECF00123025 /* colorize.command */; };
 		087381FF28AB86D0008DD049 /* init_script.sh in Resources */ = {isa = PBXBuildFile; fileRef = 086BABCA28A7BD7800123025 /* init_script.sh */; };
@@ -26,6 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		081692B228BA411400C56F59 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		081AD45C28B8CB92003A2595 /* VideoColorizedRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VideoColorizedRelease.entitlements; sourceTree = "<group>"; };
 		082BDE1E28854B12004AADC3 /* VideoColorized.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoColorized.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		082BDE2128854B12004AADC3 /* VideoColorizedApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoColorizedApp.swift; sourceTree = "<group>"; };
@@ -33,6 +36,7 @@
 		082BDE2528854B14004AADC3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		082BDE2828854B14004AADC3 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		082BDE2A28854B14004AADC3 /* VideoColorized.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VideoColorized.entitlements; sourceTree = "<group>"; };
+		083BF60A28BA4E72009CA4BC /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		086BABC828A7BD3E00123025 /* brew_script.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = brew_script.sh; sourceTree = "<group>"; };
 		086BABCA28A7BD7800123025 /* init_script.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = init_script.sh; sourceTree = "<group>"; };
 		086BABCB28A7BECF00123025 /* colorize.command */ = {isa = PBXFileReference; lastKnownFileType = text; path = colorize.command; sourceTree = "<group>"; };
@@ -62,6 +66,8 @@
 			isa = PBXGroup;
 			children = (
 				08785CAF28AB9D8B00EF33C7 /* Utils.swift */,
+				081692B228BA411400C56F59 /* String+Extension.swift */,
+				083BF60A28BA4E72009CA4BC /* Constant.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -234,6 +240,8 @@
 				08A3C56328A8D579008BC9E6 /* VideoFile.swift in Sources */,
 				082BDE2228854B12004AADC3 /* VideoColorizedApp.swift in Sources */,
 				08BD982D289FDD4200F3A140 /* TestManager.swift in Sources */,
+				083BF60B28BA4E72009CA4BC /* Constant.swift in Sources */,
+				081692B328BA411400C56F59 /* String+Extension.swift in Sources */,
 				08A3C56928A8F414008BC9E6 /* InstallerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -19,4 +19,6 @@ class Utils {
         let defaults = UserDefaults.standard
         defaults.set(isCompleted, forKey: "completeInstall")
     }
+    
+    
 }
