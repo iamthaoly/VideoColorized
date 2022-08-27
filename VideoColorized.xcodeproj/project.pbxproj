@@ -58,6 +58,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		081692B128BA3D8B00C56F59 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				08785CAF28AB9D8B00EF33C7 /* Utils.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		082BDE1528854B12004AADC3 = {
 			isa = PBXGroup;
 			children = (
@@ -77,17 +85,16 @@
 		082BDE2028854B12004AADC3 /* VideoColorized */ = {
 			isa = PBXGroup;
 			children = (
-				081AD45C28B8CB92003A2595 /* VideoColorizedRelease.entitlements */,
 				08A3C56428A8D582008BC9E6 /* Models */,
 				0885C82A28A4B1FA007B98CD /* Screens */,
 				0885C82728A4B182007B98CD /* Views */,
 				082BDE2528854B14004AADC3 /* Assets.xcassets */,
+				081692B128BA3D8B00C56F59 /* Helpers */,
+				08A3C56528A8F254008BC9E6 /* Scripts */,
 				082BDE2A28854B14004AADC3 /* VideoColorized.entitlements */,
 				082BDE2728854B14004AADC3 /* Preview Content */,
 				082BDE2128854B12004AADC3 /* VideoColorizedApp.swift */,
-				08BD982C289FDD4100F3A140 /* TestManager.swift */,
-				08785CAF28AB9D8B00EF33C7 /* Utils.swift */,
-				08A3C56528A8F254008BC9E6 /* Scripts */,
+				081AD45C28B8CB92003A2595 /* VideoColorizedRelease.entitlements */,
 			);
 			path = VideoColorized;
 			sourceTree = "<group>";
@@ -122,6 +129,7 @@
 		08A3C56428A8D582008BC9E6 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				08BD982C289FDD4100F3A140 /* TestManager.swift */,
 				08A3C56228A8D579008BC9E6 /* VideoFile.swift */,
 			);
 			path = Models;

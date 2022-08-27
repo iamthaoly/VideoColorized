@@ -18,7 +18,7 @@ class TestManager: ObservableObject {
     
     @Published var videoFiles: [VideoFile] = [
         VideoFile(path: "/Users/ly/Desktop/input3_10fps.mp4"),
-        VideoFile(path: "~/Desktop/My Videos/testing.mp4")
+//        VideoFile(path: "~/Desktop/My Videos/testing.mp4")
     ]
     @Published var currentVideoIndex: Int?
     
@@ -101,24 +101,26 @@ class TestManager: ObservableObject {
         
         let convertScriptURL = URL(fileURLWithPath: "colorize.command", relativeTo: Bundle.main.resourceURL)
         let runnerPath = PROJECT_PATH + "/" + "runner.py"
-        let runProjectCommand = "echo \"Colorize from sh file...\"; . $HOME/colorized-python/venv/bin/activate; python3 \(runnerPath) -i \"\(strInputs)\" -o \"\(strOutputs)\" -r \(renderFactor)"
+        let runProjectCommand = ". $HOME/colorized-python/venv/bin/activate; python3 \(runnerPath) -i \"\(strInputs)\" -o \"\(strOutputs)\" -r \(renderFactor)"
         print("Convert command:")
         print(runProjectCommand)
 
         print(convertScriptURL)
-        let bashCommand = "chown -R $(whoami) \(convertScriptURL.path); echo '\(runProjectCommand)' > \(convertScriptURL.path); chmod +x \(convertScriptURL.path); cat \(convertScriptURL.path)"
+        let bashCommand = "printf '\(runProjectCommand)' > \(convertScriptURL.path); cat \"\(convertScriptURL.path)\" 2>&1"
         print("Bash command to paste python command")
         print(bashCommand)
-        print(bashCommand.runAsCommand())
+        let bashRes = (bashCommand.runAsCommand())
+        updateString("Command ->" + bashCommand + "\n")
+        updateString("Bash result: " + bashRes + "\n")
         
         // Run convert.sh
         let command = "open -a \(TERMINAL_PATH) " + convertScriptURL.path
         print(command)
-        print(command.runAsCommand())
-        
+        let commandRes = (command.runAsCommand())
+        updateString("Command result: " + commandRes + "\n")
 //        let perCommand =  "osascript -e 'do shell script \"\(bashCommand)\" with administrator privileges'"
 //        perCommand.runAsCommand()
-        NSWorkspace.shared.open(convertScriptURL)
+//        NSWorkspace.shared.open(convertScriptURL)
     }
     
     func runInstallerInTerminal() {
@@ -127,10 +129,6 @@ class TestManager: ObservableObject {
         let url2 = URL(fileURLWithPath: "init_script.sh", relativeTo: Bundle.main.resourceURL)
         let url3 = URL(fileURLWithPath: "FIRST_RUN.command", relativeTo: Bundle.main.resourceURL)
         let url4 = URL(fileURLWithPath: "colorize.command", relativeTo: Bundle.main.resourceURL)
-
-
-//        let brew_script = "sh " + url.path
-//        let init_script = "sudo sh " + url2.path
 
         let command = "open -a \(TERMINAL_PATH) " + url3.path
         print("Current install command")
@@ -148,7 +146,7 @@ class TestManager: ObservableObject {
             print(item)
             print(item.runAsCommand())
         }
-        let res = NSWorkspace.shared.open(url3)
+//        let res = NSWorkspace.shared.open(url3)
 //        updateString("\n Cannot open script.!")
 //        let res = command.runAsCommand()
 //        updateString(res)

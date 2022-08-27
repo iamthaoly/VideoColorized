@@ -13,7 +13,7 @@ public struct ContentView: View {
     @ObservedObject var testManager: TestManager
     
     @State private var isSameAsSource = true
-    @State var outputPath: String = UserDefaults.standard.string(forKey: "outputPath") ?? ""
+    @State var outputPath: String = ((UserDefaults.standard.string(forKey: "outputPath") ?? (NSSearchPathForDirectoriesInDomains(.desktopDirectory, .userDomainMask, true) as [String]).first) ?? "")
     @State var renderFactor: Int = 21
     
     init() {
@@ -90,12 +90,13 @@ public struct ContentView: View {
             }
             
             ConvertProgressView(current: self.$testManager.current)
-//            ScrollView {
-//                Text(testManager.terminalString)
-//                    .multilineTextAlignment(.leading)
-//                    .fixedSize(horizontal: false, vertical: true)
-//            }
-//            .frame(maxWidth: .infinity)
+            ScrollView {
+                Text(testManager.terminalString)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .frame(maxWidth: .infinity, minHeight: 50)
+            
         }
         .padding(.horizontal, 30)
         .padding(.vertical, 20)
